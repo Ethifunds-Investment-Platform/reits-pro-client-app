@@ -26,7 +26,7 @@ export default function useInit() {
 			toast.error("Error getting currencies");
 			throw error;
 		}
-	}, [currencies.length, init]);
+	}, [currencies.length, ]);
 
 	const getAppActiveCurrency = React.useCallback(async () => {
 		if (activeCurrency.id) return;
