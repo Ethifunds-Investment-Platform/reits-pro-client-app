@@ -15,9 +15,9 @@ export default React.memo(function EmptyData(props: EmptyDataProps) {
 	);
 	return (
 		<div className={container}>
-			<FolderOpen className="size-24 text-neutral-500" />
+			<FolderOpen className="size-24 text-primary" />
 
-			{props.title && <h1 className="heading-7 text-neutral-1000">{props.title}</h1>}
+			{props.title && <h1 className="text-xl font-semibold text-primary">{props.title}</h1>}
 			<p className="text-center body-2 text-neutral-500 max-w-96">
 				{props.text ?? "No Data available"}
 			</p>

@@ -25,6 +25,7 @@ export default function useResetPassword() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [resetRequested, setResetRequested] = useState(false);
 	const [resetMethod, setResetMethod] = useState<"email" | "phone">("email");
+	const [contact, setContact] = useState("");
 
 	// Initialize email form
 	const emailForm = useForm<EmailFormData>({
@@ -54,8 +55,9 @@ export default function useResetPassword() {
 				email: data,
 			};
 			await requestResetPassword(resetMethod === "email" ? email : phone);
+			setContact(data);
 			toast({
-				title: "Rest link sent",
+				title: "Rest code sent",
 				description: "Check your email or phone for further instructions",
 			});
 			setResetRequested(true);
@@ -85,9 +87,10 @@ export default function useResetPassword() {
 		resetMethod,
 		setResetMethod,
 		resetRequested,
-        onPhoneSubmit,
-        onEmailSubmit,
+		onPhoneSubmit,
+		onEmailSubmit,
 		emailForm,
 		phoneForm,
+		contact,
 	};
 }

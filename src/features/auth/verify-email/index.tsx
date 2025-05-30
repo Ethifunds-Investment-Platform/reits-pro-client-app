@@ -11,7 +11,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { ShieldCheck } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 import useVerifyEmail from "./use-verify-email";
 
 const VerifyEmail = () => {
@@ -37,7 +36,7 @@ const VerifyEmail = () => {
 								render={({ field }) => (
 									<FormItem className="mx-auto">
 										<FormControl>
-											<InputOTP maxLength={6} {...field}>
+											<InputOTP maxLength={6} {...field} >
 												<InputOTPGroup className="flex justify-center gap-2">
 													<InputOTPSlot index={0} className="h-12 w-12 text-lg" />
 													<InputOTPSlot index={1} className="h-12 w-12 text-lg" />

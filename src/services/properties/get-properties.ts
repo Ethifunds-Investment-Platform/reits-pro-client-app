@@ -8,7 +8,7 @@ import { projects } from "@/constants/data/project/projects";
 type Response = PaginatedResponse<Project>;
 
 type PropertyFilter = {
-	search_query?: string;
+	search?: string;
 	property_type?: string;
 	min_investment?: number;
 	expected_return?: number;

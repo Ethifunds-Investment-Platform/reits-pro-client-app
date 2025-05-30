@@ -1,75 +1,59 @@
-
-import { useState, useEffect } from "react";
 import { ProfileBase } from "../components/profile-base";
 import { ProfileForm } from "../components/profile-form";
 import { ProfileStats } from "./profile-stats";
 import { DeveloperInfo } from "./developer-info";
 import useAppSelector from "@/store/hooks";
-import { DeveloperProfile } from "@/types/developer.types";
 import LoadingBox from "@/components/app/loading-box";
+import { useQuery } from "@tanstack/react-query";
+import getDeveloperProfile from "@/services/developer/get-developer-profile";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BankDetails } from "../components/bank-details";
+
 
 export default function DeveloperProfilePage() {
-  const { account } = useAppSelector("account");
-  const [developerProfile, setDeveloperProfile] = useState<DeveloperProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+	const { account } = useAppSelector("account");
 
-  useEffect(() => {
-    // Mock fetching developer profile data
-    const fetchDeveloperProfile = async () => {
-      try {
-        // This would normally be an API call
-        setTimeout(() => {
-          setDeveloperProfile({
-            id: "dev-1",
-            developer_id: account?.id || "",
-            developer: account,
-            projects_completed: 12,
-            bio: "Experienced real estate developer with 15 years in the industry",
-            active_projects: 3,
-            total_raised: 4500000,
-            average_return: 14.5,
-            operating_location: "Lagos, Nigeria",
-            established_at: "2010-05-20T00:00:00Z",
-            created_at: "2023-01-01T00:00:00Z",
-            updated_at: "2023-05-15T00:00:00Z"
-          });
-          setIsLoading(false);
-        }, 1000);
-      } catch (error) {
-        console.error("Failed to fetch developer profile:", error);
-        setIsLoading(false);
-      }
-    };
+	const { data: developerProfile, isFetching } = useQuery({
+		queryKey: ["developer-profile"],
+		queryFn: () => getDeveloperProfile({ developer_id: account?.id }),
+	});
+	if (isFetching) {
+		return <LoadingBox type="screen" load_type="spinner" />;
+	}
 
-    if (account?.id) {
-      fetchDeveloperProfile();
-    }
-  }, [account?.id]);
+	return (
+		<ProfileBase user={account}>
+			<Tabs defaultValue="profile">
+				<TabsList className=" gap-5">
+					<TabsTrigger value="profile">Profile</TabsTrigger>
+					<TabsTrigger value="bank_details">Bank Details</TabsTrigger>
+				</TabsList>
 
-  if (isLoading) {
-    return <LoadingBox type="screen" load_type="spinner" />;
-  }
+				<TabsContent value="profile">
+					<div className="grid gap-6 md:grid-cols-12">
+						{/* Left column - User info */}
+						<div className="md:col-span-7">
+							<ProfileForm user={account} bio={developerProfile?.bio} />
+						</div>
 
-  return (
-    <ProfileBase user={account}>
-      <div className="grid gap-6 md:grid-cols-12">
-        {/* Left column - User info */}
-        <div className="md:col-span-7">
-          <ProfileForm user={account} bio={developerProfile?.bio} />
-        </div>
-        
-        {/* Right column - Stats */}
-        <div className="md:col-span-5">
-          {developerProfile && (
-            <>
-              <ProfileStats developerProfile={developerProfile} />
-              <div className="mt-6">
-                <DeveloperInfo developerProfile={developerProfile} />
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </ProfileBase>
-  );
+						{/* Right column - Stats */}
+						<div className="md:col-span-5">
+							{developerProfile && (
+								<>
+									<ProfileStats developerProfile={developerProfile} />
+									<div className="mt-6">
+										<DeveloperInfo developerProfile={developerProfile} />
+									</div>
+								</>
+							)}
+						</div>
+					</div>
+				</TabsContent>
+
+				<TabsContent value="bank_details" className="w-3/4">
+					<BankDetails />
+				</TabsContent>
+			</Tabs>
+		</ProfileBase>
+	);
 }

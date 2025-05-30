@@ -5,7 +5,7 @@ import { developersMetrics } from "@/constants/data/developers";
 type Response = DevelopersMetrics;
 
 export async function production(): Promise<Response> {
-	const response = await axios.get(`/developers/metrics`);
+	const response = await axios.get(`/developers-metrics`);
 	return response.data.data;
 }
 

@@ -47,7 +47,7 @@ export default function useProperties() {
 		queryFn: () =>
 			getProperties({
 				page,
-				search_query: filters.searchQuery || undefined,
+				search: filters.searchQuery || undefined,
 				property_type: filters.propertyType !== "all" ? filters.propertyType : undefined,
 				min_investment: filters.minInvestment > 0 ? filters.minInvestment : undefined,
 				expected_return: filters.expectedReturn > 0 ? filters.expectedReturn : undefined,

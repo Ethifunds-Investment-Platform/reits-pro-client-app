@@ -69,7 +69,9 @@ export default React.memo(function Updates(props: Project) {
 										<div className="p-4" key={item.id}>
 											<div className="flex items-center justify-between mb-2">
 												<h3 className="font-medium text-navy-800">{item.title}</h3>
-												<span className="text-sm text-gray-500">{item.created_at}</span>
+												<span className="text-sm text-gray-500">{new Date(item.created_at).toLocaleDateString("default", {
+													dateStyle:"long"
+												})}</span>
 											</div>
 											<p className="text-gray-600 text-sm">{item.content}</p>
 

@@ -3,7 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { Project } from "@/types/project.types";
 import { Calendar, CircleDollarSign, Percent } from "lucide-react";
 import { Users } from "lucide-react";
-import { figureConverter } from "@/lib/figure-converter";
+
 
 export default function ContentSlider(props: Project) {
 	const progress = (props.amount_raised / props.funding_goal) * 100;
@@ -15,10 +15,11 @@ export default function ContentSlider(props: Project) {
 						<div className="space-y-6">
 							<div>
 								<h3 className="text-2xl font-bold text-navy-800">
-									{figureConverter(props.funding_goal, {
-										currency: props.currency.symbol,
+									{props.currency.symbol} {props.funding_goal.toLocaleString()}
+									{/* {figureConverter(props.funding_goal, {
+										currency: props.currency.code,
 										precision: 2,
-									})}
+									})} */}
 								</h3>
 								<p className="text-sm text-gray-600">Total Offering Size</p>
 							</div>
@@ -29,9 +30,10 @@ export default function ContentSlider(props: Project) {
 										{Math.round(progress)}% Funded
 									</span>
 									<span className="text-sm text-gray-600">
-										{figureConverter(props.amount_raised, {
-											currency: props.currency.symbol,
-										})}{" "}
+										{props.currency.symbol} {props.amount_raised.toLocaleString()}{" "}
+										{/* {figureConverter(props.amount_raised, {
+											currency: props.currency.code,
+										})}{" "} */}
 										raised
 									</span>
 								</div>
@@ -52,9 +54,10 @@ export default function ContentSlider(props: Project) {
 									<div className="flex items-center">
 										<CircleDollarSign className="h-4 w-4 text-gold-500 mr-1" />
 										<span className="font-semibold text-navy-800">
-											{figureConverter(props.minimum_investment, {
-												currency: props.currency.symbol,
-											})}
+											{props.currency.symbol} {props.minimum_investment.toLocaleString()}
+											{/* {figureConverter(props.minimum_investment, {
+												currency: props.currency.code,
+											})} */}
 										</span>
 									</div>
 								</div>

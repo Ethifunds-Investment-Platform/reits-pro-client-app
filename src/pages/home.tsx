@@ -119,7 +119,7 @@ const HomePage = () => {
 							className="border-navy-600 text-navy-700 hover:bg-navy-50 hidden md:flex"
 						>
 							<Link to="/properties" className="inline-flex items-center">
-								View All Properties
+								View All Investments
 								<ChevronRight className="ml-2 h-4 w-4" />
 							</Link>
 						</Button>
@@ -134,7 +134,7 @@ const HomePage = () => {
 							className="border-navy-600 text-navy-700 hover:bg-navy-50"
 						>
 							<Link to="/properties">
-								View All Properties
+								View All Investments
 								<ChevronRight className="ml-2 h-4 w-4" />
 							</Link>
 						</Button>

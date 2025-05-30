@@ -1,4 +1,5 @@
 import { Project } from "@/types/project.types";
+import { users } from "../users";
 
 const propertyImages = [
 	"https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
@@ -14,6 +15,7 @@ export const projects: Project[] = [
 		id: "1",
 		name: "Lagos Heights Residential",
 		developer_id: "dev-001",
+		developer: users[0],
 		type: "development",
 		description: "A modern residential complex with premium amenities in the heart of Lagos.",
 		location: {
@@ -62,11 +64,13 @@ export const projects: Project[] = [
 		financial_projections: "https://example.com/projects/1/financial-projections",
 		created_at: "2024-01-01",
 		updated_at: "2024-04-01",
+		paystack_product_url: "https://example.com/projects/1/paystack-product-url",
 	},
 	{
 		id: "2",
 		name: "Abuja Tech Innovation Hub",
 		developer_id: "dev-002",
+		developer: users[0],
 		type: "completed",
 		description:
 			"A state-of-the-art technology hub designed to foster innovation and collaboration.",
@@ -117,11 +121,13 @@ export const projects: Project[] = [
 		financial_projections: "https://example.com/projects/2/financial-projections",
 		created_at: "2024-02-01",
 		updated_at: "2024-03-15",
+		paystack_product_url: "https://example.com/projects/2/paystack-product-url",
 	},
 	{
 		id: "3",
 		name: "Ibadan Ring Road Plaza",
 		developer_id: "dev-003",
+		developer: users[0],
 		type: "development",
 		description: "A mixed-use commercial development in the growing business district of Ibadan.",
 		location: {
@@ -170,11 +176,13 @@ export const projects: Project[] = [
 		financial_projections: "https://example.com/projects/3/financial-projections",
 		created_at: "2024-02-15",
 		updated_at: "2024-03-30",
+		paystack_product_url: "https://example.com/projects/3/paystack-product-url",
 	},
 	{
 		id: "4",
 		name: "Port Harcourt Petroleum Business Center",
 		developer_id: "dev-004",
+		developer: users[0],
 		type: "completed",
 		description:
 			"A premium commercial plaza catering to oil & gas companies and related businesses.",
@@ -224,11 +232,13 @@ export const projects: Project[] = [
 		financial_projections: "https://example.com/projects/4/financial-projections",
 		created_at: "2023-06-01",
 		updated_at: "2025-01-10",
+		paystack_product_url: "https://example.com/projects/4/paystack-product-url",
 	},
 	{
 		id: "5",
 		name: "Enugu Parkview Residences",
 		developer_id: "dev-005",
+		developer: users[0],
 		type: "development",
 		description: "Luxury garden apartments with modern amenities in a serene environment.",
 		location: {
@@ -277,5 +287,6 @@ export const projects: Project[] = [
 		financial_projections: "https://example.com/projects/5/financial-projections",
 		created_at: "2023-05-01",
 		updated_at: "2024-11-22",
+		paystack_product_url: "https://example.com/projects/5/paystack-product-url",
 	},
 ];

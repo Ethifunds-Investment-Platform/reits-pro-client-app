@@ -16,9 +16,12 @@ export default React.memo(function AuthGate({ children }: { children: React.Reac
 	const { navigate } = useCustomNavigation();
 
 	const logout = React.useCallback(async () => {
-		await logoutAccount();
-		deleteCookie();
-		navigate("/");
+		try {
+			await logoutAccount();
+			deleteCookie();
+		} catch {
+			navigate("/");
+		}
 	}, []);
 
 	const session = React.useCallback(async () => {

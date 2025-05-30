@@ -16,10 +16,7 @@ type Parameter = PaginationQuery & {
 
 export async function production({ investor_id, ...data }: Parameter): Promise<Response> {
 	const query = buildQueryString(data);
-	const endpoint = investor_id
-		? `/investments?investor_id=${investor_id}&${query}`
-		: `/investors/investments?${query}`;
-	const response = await axios.get(endpoint);
+	const response = await axios.get(`/investors/investments?${query}`);
 	return response.data.data;
 }
 

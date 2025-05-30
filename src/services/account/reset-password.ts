@@ -3,8 +3,8 @@ import axios from "@/lib/axios";
 
 type Parameters = {
 	email: string;
-	password: string;
-	password_confirmation: string;
+	new_password: string;
+	token: string;
 };
 
 type Response = void;

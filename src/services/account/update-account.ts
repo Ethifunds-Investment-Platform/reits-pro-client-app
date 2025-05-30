@@ -13,7 +13,7 @@ type Parameters = {
 type Response = User;
 
 export async function production(data: Parameters): Promise<Response> {
-  const response = await axios.patch("/account/update", data);
+  const response = await axios.patch("/auth/account/update", data);
   return response.data.data;
 }
 

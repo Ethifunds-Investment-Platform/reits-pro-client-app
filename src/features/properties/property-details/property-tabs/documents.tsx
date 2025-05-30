@@ -1,4 +1,6 @@
+import EmptyData from "@/components/app/empty-data";
 import { Badge, badgeVariants } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
 import useAppSelector from "@/store/hooks";
 import { Project } from "@/types/project.types";
@@ -7,39 +9,49 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 
 export default React.memo(function Documents(props: Project) {
+	const { account } = useAppSelector("account");
 	const data = [
 		{ title: "Offering Memorandum", url: props.project_memo },
 		{ title: "Financial Projections", url: props.financial_projections },
 		{ title: "Developer Track Record", url: props.developer_track_record },
 		{ title: "Market Analysis", url: props.market_analysis },
 	];
+
+	const isLoggedIn = !!account?.id;
+
+	const filteredData = data.filter((item) => item.url);
 	return (
 		<TabsContent value="documents">
 			<div className="space-y-6">
-				{/* <div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-200">
-					<FileText className="h-10 w-10 mx-auto text-navy-600 mb-4" />
-					<h3 className="text-lg font-medium text-navy-800 mb-2">
-						Investment Documents Available After Sign-Up
-					</h3>
-					<p className="text-gray-600 mb-6">
-						Create an account to access detailed financial models, developer background, and legal
-						documentation.
-					</p>
-					<Button className="bg-navy-800 hover:bg-navy-700 text-white">
-						Sign Up to Access Documents
-					</Button>
-				</div> */}
-
-				<div>
-					<h2 className="text-xl font-semibold text-navy-800 mb-3">Available Documents</h2>
-					<ul className="space-y-4">
-						{data
-							.filter((item) => item.url)
-							.map((item) => (
-								<DocumentItem key={item.title} {...item} />
-							))}
-					</ul>
-				</div>
+				{!isLoggedIn ? (
+					<div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-200">
+						<FileText className="h-10 w-10 mx-auto text-navy-600 mb-4" />
+						<h3 className="text-lg font-medium text-navy-800 mb-2">
+							Investment Documents Available After Sign-Up
+						</h3>
+						<p className="text-gray-600 mb-6">
+							Create an account to access detailed financial models, developer background, and legal
+							documentation.
+						</p>
+						<Button className="bg-navy-800 hover:bg-navy-700 text-white" asChild>
+							<Link to="/auth/register">Sign Up to Access Documents</Link>
+						</Button>
+					</div>
+				) : (
+					<div>
+						<h2 className="text-xl font-semibold text-navy-800 mb-3">Available Documents</h2>
+						<ul className="space-y-4">
+							{filteredData.length > 0 ? (
+								filteredData.map((item) => <DocumentItem key={item.title} {...item} />)
+							) : (
+								<EmptyData
+									title="No documents available"
+									text="No documents available, all documents are shown here"
+								/>
+							)}
+						</ul>
+					</div>
+				)}
 			</div>
 		</TabsContent>
 	);

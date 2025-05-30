@@ -46,7 +46,7 @@ export default function CreateProject() {
 					</Button>
 				</div>
 
-				<h1 className="text-3xl font-bold text-navy-800">Create New Project</h1>
+				<h1 className="text-2xl font-bold text-navy-800">Create New Project</h1>
 				<p className="text-gray-600 mt-2">
 					Fill in the details below to create a new property development project
 				</p>

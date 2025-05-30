@@ -76,7 +76,9 @@ const AuthButtons = () => {
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end" className="w-56">
 					<div className="px-2 py-1.5 text-sm font-medium">
+						<span className="line-clamp-1">
 						{account.email}
+						</span>
 						<div className="text-xs text-gray-500 mt-1">
 							Role: {account.role.charAt(0).toUpperCase() + account.role.slice(1)}
 						</div>

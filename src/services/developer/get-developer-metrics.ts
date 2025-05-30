@@ -1,13 +1,11 @@
 import { variables } from "@/constants";
-import { users } from "@/constants/data/users";
 import axios from "@/lib/axios";
 import { generateDigits } from "@/lib/generate-digits";
-import { User } from "@/types/user.types";
 
 type Response = {
 	active_projects: number;
 	completed_projects: number;
-	updates_due: number;
+	total_investment: number;
 };
 
 export async function production(): Promise<Response> {
@@ -22,7 +20,7 @@ export async function development(): Promise<Response> {
 				resolve({
 					active_projects: generateDigits(99),
 					completed_projects: generateDigits(99),
-					updates_due: generateDigits(99),
+					total_investment: generateDigits(99999999),
 				}),
 			2000
 		);

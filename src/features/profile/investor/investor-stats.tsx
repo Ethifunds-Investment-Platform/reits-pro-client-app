@@ -5,7 +5,7 @@ import { figureConverter } from "@/lib/figure-converter";
 
 export function InvestorStats() {
 	const { activeCurrency } = useAppSelector("init");
-	const symbol = activeCurrency?.symbol ?? "$";
+	const currency = activeCurrency?.code ?? "NGN";
 
 	// Mock data for investor stats
 	const stats = {
@@ -37,7 +37,7 @@ export function InvestorStats() {
 					<Coins className="h-5 w-5 text-primary-500 mb-2" />
 					<span className="text-sm text-gray-500">Total Invested</span>
 					<span className="font-bold text-primary-700">
-						{figureConverter(stats.totalInvested, { currency: symbol })}
+						{figureConverter(stats.totalInvested, { currency })}
 					</span>
 				</div>
 

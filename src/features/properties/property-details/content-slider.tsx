@@ -8,13 +8,17 @@ import { Calendar, CircleDollarSign, Percent } from "lucide-react";
 import { Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import useActions from "@/store/actions";
-
 import useAppSelector from "@/store/hooks";
+import { toast } from "sonner";
+import useCustomNavigation from "@/hooks/use-navigation";
+
 export default function ContentSlider(props: Project) {
 	const { account } = useAppSelector("account");
 	const { ui } = useActions();
 
-	const progress = (props.amount_raised / props.funding_goal) * 100;
+	const { navigate } = useCustomNavigation();
+
+	const progress =( (props.amount_raised / props.funding_goal) * 100);
 	const handleInvestClick = () => {
 		if (!account.id) {
 			ui.changeDialog({
@@ -24,12 +28,24 @@ export default function ContentSlider(props: Project) {
 			});
 			return;
 		}
+		
+		if (!account.bank_accounts.length) {
+			toast.info("Please add a bank account to your profile before investing.");
+			navigate(`/profile/${account.role}`);
+			return;
+		}
 
-		ui.changeDialog({
-			show: true,
-			type: "invest_now",
-			data: { project: props },
-		});
+		// ui.changeDialog({
+		// 	show: true,
+		// 	type: "invest_now",
+		// 	data: { project: props },
+		// });
+
+		if (props.paystack_product_url) {
+			window.open(props.paystack_product_url, "_blank");
+		} else {
+			toast.error("No payment link found for this project. Please contact support.");
+		}
 	};
 
 	return (
@@ -48,7 +64,7 @@ export default function ContentSlider(props: Project) {
 
 							<div>
 								<div className="flex items-center justify-between mb-2">
-									<span className="text-sm font-medium text-gray-700">{progress}% Funded</span>
+									<span className="text-sm font-medium text-gray-700">{progress.toFixed(1)}% Funded</span>
 									<span className="text-sm text-gray-600">
 										{props.currency.symbol} {props.amount_raised.toLocaleString()}
 									</span>

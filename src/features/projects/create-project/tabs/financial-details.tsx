@@ -16,12 +16,22 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn, sanitizeNumInput, parseNumericInput } from "@/lib/utils";
 import { TabsContent } from "@/components/ui/tabs";
+import useAppSelector from "@/store/hooks";
 
 type ProjectFormFinancialDetailsProps = {
 	form: UseFormReturn<any>;
 };
 
 export default function ProjectFormFinancialDetails({ form }: ProjectFormFinancialDetailsProps) {
+	const { currencies } = useAppSelector("init");
+
+	const currencyOptions = currencies?.map((currency) => ({
+		title: `${currency.name} (${currency.symbol})`,
+		value: currency.id.toString(),
+	}));
+
+	
+
 	return (
 		<TabsContent value="financial">
 			<div className="space-y-6">
@@ -34,17 +44,18 @@ export default function ProjectFormFinancialDetails({ form }: ProjectFormFinanci
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Currency*</FormLabel>
-								<Select onValueChange={field.onChange} defaultValue={field.value}>
+								<Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
 									<FormControl>
 										<SelectTrigger>
-											<SelectValue placeholder="Select currency" />
+											<SelectValue placeholder="Select currency"/>
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-										<SelectItem value="1">Nigerian Naira (₦)</SelectItem>
-										<SelectItem value="2">US Dollar ($)</SelectItem>
-										<SelectItem value="3">Euro (€)</SelectItem>
-										<SelectItem value="4">British Pound (£)</SelectItem>
+										{currencyOptions?.map((option) => (
+											<SelectItem key={option.value} value={option.value}>
+												{option.title}
+											</SelectItem>
+										))}
 									</SelectContent>
 								</Select>
 								<FormMessage />
@@ -62,7 +73,7 @@ export default function ProjectFormFinancialDetails({ form }: ProjectFormFinanci
 									<Input
 										type="text"
 										placeholder="0.00"
-										value={field.value?.toString() || ""}
+										value={field.value?.toLocaleString() || ""}
 										onChange={(e) => {
 											const sanitized = sanitizeNumInput(e.target.value);
 											field.onChange(parseNumericInput(sanitized));
@@ -86,7 +97,7 @@ export default function ProjectFormFinancialDetails({ form }: ProjectFormFinanci
 									<Input
 										type="text"
 										placeholder="0.00"
-										value={field.value?.toString() || ""}
+										value={field.value?.toLocaleString() || ""}
 										onChange={(e) => {
 											const sanitized = sanitizeNumInput(e.target.value);
 											field.onChange(parseNumericInput(sanitized));
@@ -108,7 +119,7 @@ export default function ProjectFormFinancialDetails({ form }: ProjectFormFinanci
 									<Input
 										type="text"
 										placeholder="0.00"
-										value={field.value?.toString() || ""}
+										value={field.value?.toLocaleString() || ""}
 										onChange={(e) => {
 											const sanitized = sanitizeNumInput(e.target.value);
 											field.onChange(parseNumericInput(sanitized));

@@ -1,4 +1,5 @@
 import { Currency } from "./currency.types";
+import { User } from "./user.types";
 
 export const PROJECT_STATUS = [
 	"pending",
@@ -36,6 +37,7 @@ export type Project = {
 	id: string;
 	name: string;
 	developer_id: string;
+	developer: User;
 	type: ProjectType;
 	description: string;
 	location: ProjectLocation;
@@ -64,10 +66,7 @@ export type Project = {
 	financial_projections: string | null;
 	created_at: string;
 	updated_at: string;
-	
-	// Additional fields for investor investments
-	invested_amount?: number;
-	investment_date?: string;
+	paystack_product_url: string;
 };
 
 export type NewProject = {
@@ -95,8 +94,6 @@ export type NewProject = {
 	financial_projections: string | null;
 };
 
-// export type
-
 export type NewProjectUpdate = {
 	project_id: string;
 	title: string;
@@ -114,12 +111,4 @@ export type ProjectUpdate = {
 	updated_at: string;
 };
 
-// // Helper functions
-// export const calculateFundingProgress = (project: Project): number => {
-// 	const raised = project.amount_raised ? parseFloat(project.amount_raised) : 0;
 
-// 	const goal = project.funding_goal;
-
-// 	if (!goal) return 0;
-// 	return Math.min(100, (raised / goal) * 100);
-// };

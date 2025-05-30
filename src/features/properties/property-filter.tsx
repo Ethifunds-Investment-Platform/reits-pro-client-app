@@ -12,6 +12,9 @@ import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import useAppSelector from "@/store/hooks";
+import useCustomNavigation from "@/hooks/use-navigation";
+import buildQueryString from "@/lib/build-query-string";
+
 type FilterState = {
 	searchQuery: string;
 	propertyType: string;
@@ -38,13 +41,92 @@ const PropertyFilter = ({
 }: PropertyFilterProps) => {
 	const { activeCurrency } = useAppSelector("init");
 	const [showFilters, setShowFilters] = useState(false);
+	const { navigate } = useCustomNavigation();
+
+	// Add local state to track filter changes before applying
+	const [localFilters, setLocalFilters] = useState<FilterState>(filters);
+
+	// Function to apply filters to URL
+	const applyFilters = () => {
+		const queries = {};
+
+		// Update URL with filter values
+		if (localFilters.searchQuery) {
+			queries["search"] = localFilters.searchQuery;
+		} else {
+			queries["search"] = "";
+		}
+
+		if (localFilters.propertyType !== "all") {
+			queries["type"] = localFilters.propertyType;
+		} else {
+			queries["type"] = "";
+		}
+
+		if (localFilters.minInvestment > 0) {
+			queries["minInvestment"] = localFilters.minInvestment.toString();
+		} else {
+			queries["minInvestment"] = "";
+		}
+
+		if (localFilters.expectedReturn > 0) {
+			queries["return"] = localFilters.expectedReturn.toString();
+		
+		} else {
+			queries['return']= ""
+		}
+
+		// Update URL and close mobile filters if open
+		const query_string = buildQueryString(
+			Object.fromEntries(Object.entries(queries).filter(([_, v]) => v !== ""))
+		);
+		navigate(`?${query_string}`);
+		setShowFilters(false);
+
+		// Update parent component filters
+		onUpdateSearchQuery(localFilters.searchQuery);
+		onUpdatePropertyType(localFilters.propertyType);
+		onUpdateMinInvestment([localFilters.minInvestment]);
+		onUpdateExpectedReturn([localFilters.expectedReturn]);
+	};
+
+	// Modified clear filters to also clear URL
+	const handleClearFilters = () => {
+		setLocalFilters({
+			searchQuery: "",
+			propertyType: "all",
+			minInvestment: 0,
+			expectedReturn: 0,
+		});
+		navigate("")
+		onClearFilters();
+	};
+
+	// Local state handlers
+	const handleLocalSearchUpdate = (value: string) => {
+		setLocalFilters((prev) => ({ ...prev, searchQuery: value }));
+	};
+
+	const handleLocalTypeUpdate = (value: string) => {
+		setLocalFilters((prev) => ({ ...prev, propertyType: value }));
+	};
+
+	const handleLocalMinInvestmentUpdate = (value: number[]) => {
+		setLocalFilters((prev) => ({ ...prev, minInvestment: value[0] }));
+	};
+
+	const handleLocalExpectedReturnUpdate = (value: number[]) => {
+		setLocalFilters((prev) => ({ ...prev, expectedReturn: value[0] }));
+	};
 
 	const toggleFilters = () => {
 		setShowFilters(!showFilters);
 	};
 
 	const hasActiveFilters =
-		filters.propertyType !== "all" || filters.minInvestment > 0 || filters.expectedReturn > 0;
+		localFilters.propertyType !== "all" ||
+		localFilters.minInvestment > 0 ||
+		localFilters.expectedReturn > 0;
 
 	const symbol = activeCurrency?.symbol ?? "";
 	return (
@@ -64,8 +146,8 @@ const PropertyFilter = ({
 								<Input
 									id="search"
 									placeholder="Search properties..."
-									value={filters.searchQuery}
-									onChange={(e) => onUpdateSearchQuery(e.target.value)}
+									value={localFilters.searchQuery}
+									onChange={(e) => handleLocalSearchUpdate(e.target.value)}
 									className="pl-8"
 								/>
 							</div>
@@ -73,9 +155,9 @@ const PropertyFilter = ({
 
 						<div>
 							<label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
-								Property Type
+								Investment Type
 							</label>
-							<Select value={filters.propertyType} onValueChange={onUpdatePropertyType}>
+							<Select value={localFilters.propertyType} onValueChange={handleLocalTypeUpdate}>
 								<SelectTrigger id="type">
 									<SelectValue placeholder="All Types" />
 								</SelectTrigger>
@@ -100,11 +182,12 @@ const PropertyFilter = ({
 									defaultValue={[0]}
 									max={100000}
 									step={5000}
-									value={[filters.minInvestment]}
-									onValueChange={onUpdateMinInvestment}
+									value={[localFilters.minInvestment]}
+									onValueChange={handleLocalMinInvestmentUpdate}
 								/>
 								<div className="mt-2 text-sm text-gray-600">
-									{symbol}{filters.minInvestment.toLocaleString()} or more
+									{symbol}
+									{localFilters.minInvestment.toLocaleString()} or more
 								</div>
 							</div>
 						</div>
@@ -119,22 +202,30 @@ const PropertyFilter = ({
 									defaultValue={[0]}
 									max={20}
 									step={0.5}
-									value={[filters.expectedReturn]}
-									onValueChange={onUpdateExpectedReturn}
+									value={[localFilters.expectedReturn]}
+									onValueChange={handleLocalExpectedReturnUpdate}
 								/>
 								<div className="mt-2 text-sm text-gray-600">
-									{filters.expectedReturn}% or higher
+									{localFilters.expectedReturn}% or higher
 								</div>
 							</div>
 						</div>
 
-						<Button
-							variant="outline"
-							className="w-full border-navy-600 text-navy-600 hover:bg-navy-50"
-							onClick={onClearFilters}
-						>
-							Clear All Filters
-						</Button>
+						<div className="flex gap-2">
+							<Button
+								variant="outline"
+								className="flex-1 border-navy-600 text-navy-600 hover:bg-navy-50"
+								onClick={handleClearFilters}
+							>
+								Clear All
+							</Button>
+							<Button
+								className="flex-1 bg-navy-800 hover:bg-navy-700 text-white"
+								onClick={applyFilters}
+							>
+								Apply Filters
+							</Button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -145,8 +236,8 @@ const PropertyFilter = ({
 					<Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
 					<Input
 						placeholder="Search properties..."
-						value={filters.searchQuery}
-						onChange={(e) => onUpdateSearchQuery(e.target.value)}
+						value={localFilters.searchQuery}
+						onChange={(e) => handleLocalSearchUpdate(e.target.value)}
 						className="pl-8"
 					/>
 				</div>
@@ -184,7 +275,7 @@ const PropertyFilter = ({
 								>
 									Property Type
 								</label>
-								<Select value={filters.propertyType} onValueChange={onUpdatePropertyType}>
+								<Select value={localFilters.propertyType} onValueChange={handleLocalTypeUpdate}>
 									<SelectTrigger id="mobile-type">
 										<SelectValue placeholder="All Types" />
 									</SelectTrigger>
@@ -209,11 +300,11 @@ const PropertyFilter = ({
 										defaultValue={[0]}
 										max={100000}
 										step={5000}
-										value={[filters.minInvestment]}
-										onValueChange={onUpdateMinInvestment}
+										value={[localFilters.minInvestment]}
+										onValueChange={handleLocalMinInvestmentUpdate}
 									/>
 									<div className="mt-2 text-sm text-gray-600">
-										${filters.minInvestment.toLocaleString()} or more
+										${localFilters.minInvestment.toLocaleString()} or more
 									</div>
 								</div>
 							</div>
@@ -231,11 +322,11 @@ const PropertyFilter = ({
 										defaultValue={[0]}
 										max={20}
 										step={0.5}
-										value={[filters.expectedReturn]}
-										onValueChange={onUpdateExpectedReturn}
+										value={[localFilters.expectedReturn]}
+										onValueChange={handleLocalExpectedReturnUpdate}
 									/>
 									<div className="mt-2 text-sm text-gray-600">
-										{filters.expectedReturn}% or higher
+										{localFilters.expectedReturn}% or higher
 									</div>
 								</div>
 							</div>
@@ -244,13 +335,13 @@ const PropertyFilter = ({
 								<Button
 									variant="outline"
 									className="flex-1 border-navy-600 text-navy-600 hover:bg-navy-50"
-									onClick={onClearFilters}
+									onClick={handleClearFilters}
 								>
 									Clear All
 								</Button>
 								<Button
 									className="flex-1 bg-navy-800 hover:bg-navy-700 text-white"
-									onClick={toggleFilters}
+									onClick={applyFilters}
 								>
 									Apply Filters
 								</Button>
@@ -259,7 +350,6 @@ const PropertyFilter = ({
 					</div>
 				)}
 			</div>
-
 		</>
 	);
 };

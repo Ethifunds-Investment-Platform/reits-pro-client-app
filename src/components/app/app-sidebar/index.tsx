@@ -35,7 +35,7 @@ export default function AppSidebar(props: Props) {
 	return (
 		<Sidebar className="py-5">
 			<SidebarHeader className="px-3">
-				<AppLogo />
+				<AppLogo clickable={true} />
 			</SidebarHeader>
 			<Separator />
 			<SidebarContent className="px-3 pt-5">

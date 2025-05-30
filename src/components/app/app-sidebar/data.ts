@@ -62,7 +62,7 @@ export const sidebarLinks: SidebarLink[] = [
 		role: ["investor"],
 	},
 	{
-		name: "properties",
+		name: "investments",
 		path: "/properties",
 		icon: IconContainer(Building2),
 		activeIcon: IconContainer(Building2, true),

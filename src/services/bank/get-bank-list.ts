@@ -1,22 +1,23 @@
 import { variables } from "@/constants";
+import { bankList } from "@/constants/data/bank-list";
 import axios from "@/lib/axios";
-import { DeveloperProfile } from "@/types/developer.types";
-import { developers } from "@/constants/data/developers";
+import { Bank } from "@/types/bank-account.types";
 
-type Response = DeveloperProfile[];
+type Response = Bank[];
 
 export async function production(): Promise<Response> {
-	const response = await axios.get(`/developers`);
+	const response = await axios.get(`/bank-list`);
+
 	return response.data.data;
 }
 
 export async function development(): Promise<Response> {
 	return new Promise((resolve) => {
-		setTimeout(() => resolve(developers), 2000);
+		setTimeout(() => resolve(bankList), 2000);
 	});
 }
 
-export default async function getDeveloperProfiles(): Promise<Response> {
+export default async function getBankList(): Promise<Response> {
 	if (variables.NODE_ENV === "development") return development();
 
 	return production();

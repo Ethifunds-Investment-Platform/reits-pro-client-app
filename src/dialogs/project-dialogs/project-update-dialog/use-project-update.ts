@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { toast } from "sonner";
 import useActions from "@/store/actions";
 import useAppSelector from "@/store/hooks";
@@ -36,7 +36,10 @@ export default function useProjectUpdate() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [uploadedImages, setUploadedImages] = useState<Array<{ file: File; preview: string }>>([]);
 
-	const open = dialog?.show && dialog?.type === "project_update";
+	const open = useMemo(
+		() => dialog?.show && dialog?.type === "project_update",
+		[dialog?.show, dialog?.type]
+	);
 
 	const reset = () => {
 		if (isLoading) return;

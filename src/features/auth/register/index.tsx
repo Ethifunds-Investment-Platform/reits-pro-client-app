@@ -85,7 +85,7 @@ const Register = () => {
 								name="phoneNumber"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Phone Number (Nigerian)</FormLabel>
+										<FormLabel>Phone Number </FormLabel>
 										<FormControl>
 											<div className="relative">
 												<Phone className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
@@ -150,7 +150,7 @@ const Register = () => {
 								name="role"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>I am a</FormLabel>
+										<FormLabel>I am</FormLabel>
 										<Select 
 											onValueChange={(value) => {
 												field.onChange(value);
@@ -167,8 +167,8 @@ const Register = () => {
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												<SelectItem value="developer">Developer</SelectItem>
-												<SelectItem value="investor">Investor</SelectItem>
+												<SelectItem value="developer">A Developer</SelectItem>
+												<SelectItem value="investor">An Investor</SelectItem>
 											</SelectContent>
 										</Select>
 										<FormMessage />

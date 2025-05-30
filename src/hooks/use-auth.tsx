@@ -12,16 +12,21 @@ export default function useAuth() {
 	const { account: accountActions } = useActions();
 
 	const getUser = React.useCallback(async () => {
-		if (!authToken || !account?.id) return null;
+		if (!authToken) return null;
 		if (variables.NODE_ENV === "development") {
 			accountActions.changeAccount(users[0]);
 			return;
 		}
-		const response = await axios.get("/me");
+		const response = await axios.get("auth/me", {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+		
 		if (response.data.data) {
 			return accountActions.changeAccount(response.data.data);
 		}
-	}, [authToken, account?.id]);
+	}, [authToken]);
 
 	React.useLayoutEffect(() => {
 		getUser();

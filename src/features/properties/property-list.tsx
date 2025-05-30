@@ -27,6 +27,7 @@ export const projectToPropertyData = (project: Project) => {
 		fundingProgress: Math.min(100, (project.amount_raised / project.funding_goal) * 100),
 		investorsCount: project.total_investors,
 		minimumInvestment: project.minimum_investment,
+		currency: project.currency,
 	};
 };
 

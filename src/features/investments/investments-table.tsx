@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import EmptyData from "@/components/app/empty-data";
 import mergeText from "@/lib/transform-text";
 import truncate from "@/lib/truncate";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { Investment } from "@/types/investments.types";
 type TableProps = {
 	data: Investment[];
@@ -20,10 +19,14 @@ type TableProps = {
 };
 
 export default function InvestmentsTable(props: TableProps) {
-	const isMobile = useIsMobile();
-
 	if (props.isEmpty)
-		return <EmptyData title="No investments found" text="You haven't made any investments yet." />;
+		return (
+			<EmptyData
+				title="No investments found"
+				text="You haven't made any investments yet."
+				className="pt-10"
+			/>
+		);
 
 	return (
 		<Table>
@@ -31,8 +34,8 @@ export default function InvestmentsTable(props: TableProps) {
 				<TableRow className="whitespace-nowrap">
 					<TableHead>Project Name</TableHead>
 					<TableHead>Location</TableHead>
-					<TableHead >Amount Invested</TableHead>
-					<TableHead >Expected ROI</TableHead>
+					<TableHead>Amount Invested</TableHead>
+					<TableHead>Expected ROI</TableHead>
 					<TableHead>Status</TableHead>
 					<TableHead>Actions</TableHead>
 				</TableRow>
@@ -50,12 +53,10 @@ export default function InvestmentsTable(props: TableProps) {
 									", "
 								)}
 							</TableCell>
-							<TableCell >
+							<TableCell>
 								{currency} {item.amount_invested.toLocaleString()}
 							</TableCell>
-							<TableCell >
-								{item.project.expected_roi}%
-							</TableCell>
+							<TableCell>{item.project.expected_roi}%</TableCell>
 							<TableCell>
 								<Badge variant="outline" className="capitalize">
 									{item.project.status}

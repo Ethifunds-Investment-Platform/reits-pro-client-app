@@ -8,10 +8,10 @@ import { Link } from "react-router-dom";
 
 export default React.memo(function Documents(props: Project) {
 	const data = [
-		{ title: "Offering Memorandum", url: props.project_memo },
-		{ title: "Financial Projections", url: props.financial_projections },
-		{ title: "Developer Track Record", url: props.developer_track_record },
-		{ title: "Market Analysis", url: props.market_analysis },
+		{ title: "Offering Memorandum", url: props.project_memo || "" },
+		{ title: "Financial Projections", url: props.financial_projections || "" },
+		{ title: "Developer Track Record", url: props.developer_track_record || "" },
+		{ title: "Market Analysis", url: props.market_analysis || "" },
 	];
 	return (
 		<TabsContent value="documents">
@@ -34,7 +34,7 @@ export default React.memo(function Documents(props: Project) {
 					<h2 className="text-xl font-semibold text-navy-800 mb-3">Available Documents</h2>
 					<ul className="space-y-4">
 						{data
-							.filter((item) => item.url)
+							.filter((item) => item.url !== "")
 							.map((item) => (
 								<DocumentItem key={item.title} {...item} />
 							))}

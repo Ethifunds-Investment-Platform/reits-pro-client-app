@@ -6,6 +6,7 @@ import FileInput from "@/components/ui/form-input/file-input";
 import blobReader from "@/lib/blob-reader";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 type ProjectFormAnalysisTabProps = {
 	form: UseFormReturn<any>;
@@ -27,6 +28,13 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 	async function handleFileChange(fieldName: string, e: React.ChangeEvent<HTMLInputElement>) {
 		const file = e.target.files?.[0];
 		if (!file) return;
+
+			if (file.size > 2 * 1024 * 1024) {
+				toast.error("File size too large", {
+					description: "Please upload a file smaller than 2MB",
+				});
+				return;
+			}
 
 		try {
 			const base64 = await blobReader(file);
@@ -103,7 +111,7 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 											name="project_memo"
 											accept=".pdf,.doc,.docx"
 											placeholder="Upload project memo document"
-											maxFileSize="10MB"
+											maxFileSize="2MB"
 											onChange={(e) => handleFileChange("project_memo", e)}
 										/>
 									)}
@@ -142,7 +150,7 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 											name="developer_track_record"
 											accept=".pdf,.doc,.docx"
 											placeholder="Upload developer track record document"
-											maxFileSize="10MB"
+											maxFileSize="2MB"
 											onChange={(e) => handleFileChange("developer_track_record", e)}
 										/>
 									)}
@@ -182,7 +190,7 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 												name="market_analysis"
 												accept=".pdf,.doc,.docx,.xls,.xlsx"
 												placeholder="Upload market analysis document"
-												maxFileSize="10MB"
+												maxFileSize="2MB"
 												onChange={(e) => handleFileChange("market_analysis", e)}
 											/>
 										)}
@@ -221,7 +229,7 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 												name="financial_projections"
 												accept=".pdf,.doc,.docx,.xls,.xlsx"
 												placeholder="Upload financial projections document"
-												maxFileSize="10MB"
+												maxFileSize="2MB"
 												onChange={(e) => handleFileChange("financial_projections", e)}
 											/>
 										)}

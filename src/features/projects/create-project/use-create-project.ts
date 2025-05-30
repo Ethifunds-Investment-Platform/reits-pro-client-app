@@ -86,7 +86,7 @@ export function useCreateProject() {
 				distribution_frequency: values.distribution_frequency as DistributionFrequency,
 				images: values.images || [],
 				developer_id: account.id,
-				funding_deadline: null,
+				funding_deadline: values.funding_deadline || null,
 				project_memo: values.project_memo || null,
 				developer_track_record: values.developer_track_record || null,
 				market_analysis: values.market_analysis || null,

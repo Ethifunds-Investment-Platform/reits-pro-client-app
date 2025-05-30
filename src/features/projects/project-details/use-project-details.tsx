@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function useProjectDetails() {
 	const { params } = useCustomNavigation();
-	const project_id = params.project_id;
+	const project_id = params.id as string;
 
 	const { data, isFetching, isError, error } = useQuery({
 		queryKey: ["project-details", project_id],

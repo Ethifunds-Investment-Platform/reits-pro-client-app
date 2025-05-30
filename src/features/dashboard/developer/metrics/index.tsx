@@ -1,4 +1,4 @@
-import { Clock } from "lucide-react";
+import { Clock, TrendingUp } from "lucide-react";
 
 import { ListChecks } from "lucide-react";
 
@@ -6,9 +6,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import useMetrics from "./use-metrics";
 import { Building } from "lucide-react";
 import { amountSeparator } from "@/lib/amount-separator";
-
+import { figureConverter } from "@/lib/figure-converter";
+import useAppSelector from "@/store/hooks";
 export default function DeveloperMetrics() {
 	const { data } = useMetrics();
+	const { activeCurrency } = useAppSelector("init");
+
+	const currency = activeCurrency?.code ?? "NGN";
+
+	console.log(currency)
+
 	const cardData = [
 		{
 			icon: <Building className="h-8 w-8 text-navy-600" />,
@@ -21,9 +28,9 @@ export default function DeveloperMetrics() {
 			value: amountSeparator(data?.completed_projects ?? 0),
 		},
 		{
-			icon: <Clock className="h-8 w-8 text-navy-600" />,
-			title: "Updates Due",
-			value: amountSeparator(data?.updates_due ?? 0),
+			icon: <TrendingUp className="h-8 w-8 text-navy-600" />,
+			title: "Total Investment",
+			value: figureConverter(data?.total_investment ?? 0, { currency, precision: 2 }),
 		},
 	];
 

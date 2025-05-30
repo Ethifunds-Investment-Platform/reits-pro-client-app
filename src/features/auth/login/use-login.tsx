@@ -57,7 +57,6 @@ export default function useLogin() {
 			// login user
 			const response = await loginAccount({ email: data.email, password: data.password });
 			setCookie(response.token);
-			console.log(response);
 			accountActions.changeAccount(response.user);
 			accountActions.changeToken(response.token);
 			const userRoute = redirect?.length > 0 ? redirect : `/${response.user.role}/dashboard`;

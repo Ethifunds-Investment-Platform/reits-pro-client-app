@@ -86,6 +86,7 @@ export default function useRegister() {
 		try {
 			const { email, name, phoneNumber, password, role, operating_location, established_at } = data;
 
+
 			const account = await createAccount({
 				email,
 				name,
@@ -96,7 +97,7 @@ export default function useRegister() {
 				established_at,
 			});
 			
-			
+
 			toast({
 				title: "Account creation successful",
 				description: "You have successfully created an account",

@@ -6,6 +6,7 @@ import FileInput from "@/components/ui/form-input/file-input";
 import blobReader from "@/lib/blob-reader";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 type ProjectFormImagesTabProps = {
 	form: UseFormReturn<any>;
@@ -23,6 +24,12 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 	async function handleDisplayImageChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const file = e.target.files?.[0];
 		if (!file) return;
+		if (file.size > 2 * 1024 * 1024) {
+			toast.error("File size too large", {
+				description: "Please upload a file smaller than 2MB",
+			});
+			return;
+		}
 
 		try {
 			const base64 = await blobReader(file);
@@ -150,7 +157,7 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 											name="display_image"
 											accept=".jpg,.jpeg,.png"
 											placeholder="Upload display image"
-											maxFileSize="5MB"
+											maxFileSize="2MB"
 											onChange={handleDisplayImageChange}
 											required
 										/>
@@ -175,7 +182,7 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 											name="additional_images"
 											accept=".jpg,.jpeg,.png"
 											placeholder="Upload additional images"
-											maxFileSize="5MB"
+											maxFileSize="2MB"
 											onChange={handleAdditionalImagesChange}
 											multiple
 										/>

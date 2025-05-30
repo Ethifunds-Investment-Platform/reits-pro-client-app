@@ -22,15 +22,4 @@ export type InvestorProfile = {
     updated_at: string;
 };
 
-export type InvestmentOpportunity = {
-    id: string;
-    title: string;
-    developer: string;
-    location: string;
-    type: "Residential" | "Commercial" | "Mixed-use" | "Industrial";
-    roi: string;
-    minInvestment: string;
-    status: "open" | "closed" | "funded";
-    progress: number;
-    image?: string;
-};
+

@@ -41,7 +41,7 @@ export default function useVerifyEmail() {
 		setIsSubmitting(true);
 		try {
 			// Mock verification with any 6-digit code
-			await verifyAccountEmail({ email, otp_code: data.otp });
+			await verifyAccountEmail({ email, token: data.otp });
 			toast({
 				title: "Account verified",
 				description: "Your account has been verified",

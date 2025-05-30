@@ -6,9 +6,9 @@ import { DeveloperProfile } from "@/types/developer.types";
 
 
 export default function DeveloperCard(props: DeveloperProfile&{symbol: string}) {
-	const operating_location = props.operating_location.includes(",")
-		? props.operating_location
-		: props.operating_location.replace(" ", ",");
+	const operating_location = props?.operating_location?.includes(",")
+		? props?.operating_location
+		: props?.operating_location?.replace(" ", ",");
 
 	const established = new Date(props.established_at).getFullYear();
 

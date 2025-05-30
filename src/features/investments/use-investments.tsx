@@ -7,8 +7,8 @@ export default function useInvestments() {
 	const { account } = useAppSelector("account");
 	const { queryParams } = useCustomNavigation();
 	const page = queryParams.get("page") ? parseInt(queryParams.get("page")!) : 1;
-	const status = queryParams.get("status");
-	const search = queryParams.get("search");
+	const status = queryParams.get("status") ?? "";
+	const search = queryParams.get("search") ?? "";
 
 	const query = useQuery({
 		queryKey: ["investor-investments-list", account?.id, page, status, search],
