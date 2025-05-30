@@ -37,7 +37,7 @@ export default function useInit() {
 			toast.error("Error getting active currency");
 			throw error;
 		}
-	}, [activeCurrency, init]);
+	}, [activeCurrency]);
 
 
 	React.useLayoutEffect(() => {
