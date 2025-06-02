@@ -26,11 +26,21 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { UserPlus, Mail, Phone, LockKeyhole, User, Building, Calendar } from "lucide-react";
+import {
+	UserPlus,
+	Mail,
+	Phone,
+	LockKeyhole,
+	User,
+	Building,
+	Calendar,
+	EyeOff,
+	Eye,
+} from "lucide-react";
 import useRegister from "./use-register";
 
 const Register = () => {
-	const { isSubmitting, form, onSubmit } = useRegister();
+	const { isSubmitting, form, onSubmit, showPassword, togglePassword } = useRegister();
 	return (
 		<div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 			<Card className="w-full max-w-md">
@@ -90,7 +100,7 @@ const Register = () => {
 											<div className="relative">
 												<Phone className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
 												<Input
-													placeholder="08012345678 or +2348012345678"
+													placeholder="+2348012345678"
 													className="pl-10"
 													{...field}
 												/>
@@ -111,11 +121,22 @@ const Register = () => {
 											<div className="relative">
 												<LockKeyhole className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
 												<Input
-													type="password"
+													type={showPassword ? "text" : "password"}
 													placeholder="••••••••"
 													className="pl-10"
 													{...field}
 												/>
+												{showPassword ? (
+													<Eye
+														onClick={togglePassword}
+														className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+													/>
+												) : (
+													<EyeOff
+														onClick={togglePassword}
+														className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+													/>
+												)}
 											</div>
 										</FormControl>
 										<FormMessage />
@@ -151,14 +172,14 @@ const Register = () => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>I am</FormLabel>
-										<Select 
+										<Select
 											onValueChange={(value) => {
 												field.onChange(value);
 												if (value !== "developer") {
 													form.setValue("operating_location", "");
 													form.setValue("established_at", "");
 												}
-											}} 
+											}}
 											defaultValue={field.value}
 										>
 											<FormControl>
@@ -175,7 +196,7 @@ const Register = () => {
 									</FormItem>
 								)}
 							/>
-							
+
 							{/* Developer-specific fields */}
 							{form.watch("role") === "developer" && (
 								<>
@@ -188,11 +209,7 @@ const Register = () => {
 												<FormControl>
 													<div className="relative">
 														<Building className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-														<Input
-															placeholder="State, Country"
-															className="pl-10"
-															{...field}
-														/>
+														<Input placeholder="State, Country" className="pl-10" {...field} />
 													</div>
 												</FormControl>
 												<FormMessage />
@@ -209,11 +226,7 @@ const Register = () => {
 												<FormControl>
 													<div className="relative">
 														<Calendar className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-														<Input
-															type="date"
-															className="pl-10"
-															{...field}
-														/>
+														<Input type="date" className="pl-10" {...field} />
 													</div>
 												</FormControl>
 												<FormMessage />

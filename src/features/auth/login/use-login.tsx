@@ -30,6 +30,7 @@ export default function useLogin() {
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
 	const [showOtpDialog, setShowOtpDialog] = React.useState(false);
 	const [loginData, setLoginData] = React.useState<LoginFormData | null>(null);
+	const [showPassword, setShowPassword] = React.useState(false);
 	const { setCookie } = useCookie(variables.STORAGE.session, "");
 	const redirect = queryParams.get("redirect");
 
@@ -140,6 +141,10 @@ export default function useLogin() {
 		}
 	};
 
+	const togglePassword = () => {
+		setShowPassword(!showPassword);
+	};
+
 	return {
 		isSubmitting,
 		otpForm,
@@ -150,5 +155,7 @@ export default function useLogin() {
 		onOtpSubmit,
 		onLoginSubmit,
 		resendOtp,
+		showPassword,
+		togglePassword,
 	};
 }

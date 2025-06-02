@@ -47,7 +47,7 @@ const DeveloperPartners = () => {
 			<div className="mb-12">
 				<h1 className="text-3xl font-bold text-navy-800">Our Development Partners</h1>
 				<p className="mt-2 text-gray-600">
-					RealtyRise partners with experienced real estate developers with proven track records
+					REITpro partners with experienced real estate developers with proven track records
 				</p>
 			</div>
 
@@ -84,8 +84,8 @@ const DeveloperPartners = () => {
 							<Building className="h-16 w-16 mx-auto text-gold-400 mb-4" />
 							<p className="text-white text-lg font-medium mb-6">Partner With Us</p>
 							<p className="text-navy-100 mb-8">
-								Are you a developer looking to raise capital for your next project? RealtyRise
-								connects quality developers with our network of investors.
+								Are you a developer looking to raise capital for your next project? REITpro connects
+								quality developers with our network of investors.
 							</p>
 							<Button className="bg-gold-500 hover:bg-gold-600 text-navy-900 font-semibold">
 								<Link
@@ -129,7 +129,7 @@ const DeveloperPartners = () => {
 						<div className="md:w-2/3 mb-8 md:mb-0">
 							<h2 className="text-2xl font-bold mb-4">Are you a real estate developer?</h2>
 							<p className="text-navy-100">
-								Partner with RealtyRise to raise capital for your projects from our network of
+								Partner with REITpro to raise capital for your projects from our network of
 								qualified investors. We offer a streamlined process for developers to showcase their
 								projects and secure funding.
 							</p>

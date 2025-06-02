@@ -47,7 +47,7 @@ const HomePage = () => {
 			<section className="py-16 bg-gray-50">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="text-center max-w-3xl mx-auto">
-						<h2 className="text-3xl font-bold text-navy-800 sm:text-4xl">How RealtyRise Works</h2>
+						<h2 className="text-3xl font-bold text-navy-800 sm:text-4xl">How REITpro Works</h2>
 						<p className="mt-4 text-lg text-gray-600">
 							We make real estate investing simple, transparent, and accessible.
 						</p>
@@ -146,7 +146,7 @@ const HomePage = () => {
 			<section className="py-16 bg-navy-800 text-white">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="text-center max-w-3xl mx-auto">
-						<h2 className="text-3xl font-bold sm:text-4xl">Why Choose RealtyRise</h2>
+						<h2 className="text-3xl font-bold sm:text-4xl">Why Choose REITpro</h2>
 						<p className="mt-4 text-lg text-gray-300">
 							We're transforming real estate investing with technology and transparency.
 						</p>
