@@ -7,7 +7,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { Asterisk, LockKeyhole } from "lucide-react";
+import { Asterisk, Eye, EyeOff, LockKeyhole } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,11 +31,12 @@ const newPasswordSchema = z.object({
 		.regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
 });
 
-type EmailFormData = z.infer<typeof emailSchema>;
+
 type NewPasswordFormData = z.infer<typeof newPasswordSchema>;
 
 export default function NewPassword({ email: contact }: { email: string }) {
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
+	const [showPassword, setShowPassword] = React.useState(false);
 	// Initialize email form
 	const newPasswordForm = useForm<NewPasswordFormData>({
 		resolver: zodResolver(newPasswordSchema),
@@ -74,6 +75,10 @@ export default function NewPassword({ email: contact }: { email: string }) {
 		}
 	};
 
+	const togglePassword = () => {
+		setShowPassword(!showPassword);
+	};
+
 	return (
 		<Form {...newPasswordForm}>
 			<form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-4">
@@ -103,7 +108,23 @@ export default function NewPassword({ email: contact }: { email: string }) {
 							<FormControl>
 								<div className="relative">
 									<LockKeyhole className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-									<Input type="password" placeholder="••••••••" className="pl-10" {...field} />
+									<Input
+										type={showPassword ? "text" : "password"}
+										placeholder="••••••••"
+										className="pl-10"
+										{...field}
+									/>
+									{showPassword ? (
+										<Eye
+											onClick={togglePassword}
+											className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+										/>
+									) : (
+										<EyeOff
+											onClick={togglePassword}
+											className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+										/>
+									)}
 								</div>
 							</FormControl>
 							<FormMessage />

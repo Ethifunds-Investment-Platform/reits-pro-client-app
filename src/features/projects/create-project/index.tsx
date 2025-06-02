@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AppContainer from "@/components/app/container/container";
@@ -56,29 +56,28 @@ export default function CreateProject() {
 				<Form {...form}>
 					<form id="project-form" onSubmit={form.handleSubmit(handleSubmit)}>
 						<div className="flex justify-end px-5 pt-3">
-
-						<Button
-							type="submit"
-							form="project-form"
-							disabled={isSubmitting}
-							className="bg-navy-800 hover:bg-navy-700 "
-						>
-							{isSubmitting ? (
-								<>
-									<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-									Creating...
-								</>
-							) : (
-								<>
-									<Check className="mr-2 h-4 w-4" />
-									Create Project
-								</>
-							)}
-						</Button>
-							</div>
+							<Button
+								type="submit"
+								form="project-form"
+								disabled={isSubmitting}
+								className="bg-navy-800 hover:bg-navy-700 "
+							>
+								{isSubmitting ? (
+									<>
+										<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+										Creating...
+									</>
+								) : (
+									<>
+										<Check className="mr-2 h-4 w-4" />
+										Create Project
+									</>
+								)}
+							</Button>
+						</div>
 						<CardContent className="p-6">
 							<Tabs value={activeTab} onValueChange={setActiveTab}>
-								<TabsList className="grid grid-cols-5 mb-8">
+								<TabsList className="flex gap-3 lg:grid grid-cols-5 mb-8 overflow-auto justify-start">
 									<TabsTrigger value="basic-details">Basic Details</TabsTrigger>
 									<TabsTrigger value="location">Location</TabsTrigger>
 									<TabsTrigger value="financial">Financial Details</TabsTrigger>

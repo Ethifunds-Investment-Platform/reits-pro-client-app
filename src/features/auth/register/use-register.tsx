@@ -64,6 +64,7 @@ type FormData = z.infer<typeof formSchema>;
 export default function useRegister() {
 	const { navigate } = useCustomNavigation();
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 
 	// Initialize form
 	const form = useForm<FormData>({
@@ -118,9 +119,15 @@ export default function useRegister() {
 		}
 	};
 
+	const togglePassword = () => {
+		setShowPassword(!showPassword);
+	};
+
 	return {
 		isSubmitting,
 		form,
 		onSubmit,
+		showPassword,
+		togglePassword,
 	};
 }

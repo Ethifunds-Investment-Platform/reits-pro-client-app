@@ -25,7 +25,7 @@ import {
 	DialogDescription,
 } from "@/components/ui/dialog";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { LogIn, Mail, LockKeyhole, ShieldCheck } from "lucide-react";
+import { LogIn, Mail, LockKeyhole, ShieldCheck, Eye, EyeOff } from "lucide-react";
 import useLogin from "./use-login";
 
 const Login = () => {
@@ -39,6 +39,8 @@ const Login = () => {
 		onOtpSubmit,
 		onLoginSubmit,
 		resendOtp,
+		showPassword,
+		togglePassword,
 	} = useLogin();
 
 	return (
@@ -84,11 +86,22 @@ const Login = () => {
 												<div className="relative">
 													<LockKeyhole className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
 													<Input
-														type="password"
+														type={showPassword ? "text" : "password"}
 														placeholder="••••••••"
 														className="pl-10"
 														{...field}
 													/>
+													{showPassword ? (
+														<Eye
+															onClick={togglePassword}
+															className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+														/>
+													) : (
+														<EyeOff
+															onClick={togglePassword}
+															className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+														/>
+													)}
 												</div>
 											</FormControl>
 											<FormMessage />
