@@ -3,7 +3,14 @@ import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AppContainer from "@/components/app/container/container";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import {
+	Form,
+	FormMessage,
+	FormLabel,
+	FormItem,
+	FormField,
+	FormControl,
+} from "@/components/ui/form";
 import { Link } from "react-router-dom";
 import ProjectFormBasicDetails from "./tabs/basic-details";
 import ProjectFormFinancialDetails from "./tabs/financial-details";
@@ -13,6 +20,7 @@ import ProjectFormAnalysisTab from "./tabs/analysis";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useCreateProject } from "./use-create-project";
+import { Input } from "@/components/ui/input";
 
 export default function CreateProject() {
 	const navigate = useNavigate();
@@ -55,7 +63,18 @@ export default function CreateProject() {
 			<Card className="space-y-6">
 				<Form {...form}>
 					<form id="project-form" onSubmit={form.handleSubmit(handleSubmit)}>
-						<div className="flex justify-end px-5 pt-3">
+						<div className="flex justify-between px-5 pt-3">
+							<Input
+								placeholder="Enter Paystack product URL here"
+								{...form.register("paystack_product_url")}
+								className="w-1/3"
+							/>
+							{/* <Input
+								placeholder="Enter Paystack product URL here"
+								{...form.register("paystack_product_url")}
+								className="w-1/3"
+							/> */}
+
 							<Button
 								type="submit"
 								form="project-form"

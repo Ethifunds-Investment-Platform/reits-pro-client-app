@@ -16,6 +16,7 @@ export default function useProperties() {
 	const searchQuery = queryParams.get("search") || "";
 	const propertyType = queryParams.get("type") || "all";
 	const page = Number(queryParams.get("page")) || 1;
+	const developer_id = queryParams.get("developer_id") || "";
 
 	// Parse numeric values safely with fallbacks
 	const minInvestmentStr = queryParams.get("minInvestment");
@@ -35,10 +36,11 @@ export default function useProperties() {
 	}, [searchQuery, propertyType, minInvestment, expectedReturn]);
 
 	// Query properties with filters
-	const { data, isLoading, isError, error, refetch } = useQuery({
+	const { data, isFetching, isError, error, refetch } = useQuery({
 		queryKey: [
 			"properties",
 			page,
+			developer_id,
 			filters.searchQuery,
 			filters.propertyType,
 			filters.minInvestment,
@@ -51,6 +53,7 @@ export default function useProperties() {
 				property_type: filters.propertyType !== "all" ? filters.propertyType : undefined,
 				min_investment: filters.minInvestment > 0 ? filters.minInvestment : undefined,
 				expected_return: filters.expectedReturn > 0 ? filters.expectedReturn : undefined,
+				developer_id: developer_id,
 			}),
 	});
 
@@ -116,7 +119,7 @@ export default function useProperties() {
 		// Data and loading states
 		properties: data?.docs || [],
 		totalCount: data?.totalDocs || 0,
-		isLoading,
+		isLoading: isFetching,
 		isError,
 		error,
 
