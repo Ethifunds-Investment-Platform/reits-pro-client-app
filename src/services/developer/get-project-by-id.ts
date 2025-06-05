@@ -9,7 +9,7 @@ type Parameter = {
 };
 
 export async function production(data: Parameter): Promise<Response> {
-	const response = await axios.get(`/projects/${data.project_id}`);
+	const response = await axios.get(`/developers/projects/${data.project_id}`);
 	return response.data.data;
 }
 

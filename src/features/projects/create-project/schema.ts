@@ -16,6 +16,7 @@ export const projectFormSchema = z.object({
 		state: z.string().min(1, "State is required"),
 		fullAddress: z.string().optional(),
 	}),
+	paystack_product_url: z.string().min(1, "Paystack product URL is required"),
 	display_image: z.string().min(1, "Display image is required"),
 	images: z.array(z.string()).optional(),
 	risk_factors: z.string().min(1, "At least one risk factor is required"),

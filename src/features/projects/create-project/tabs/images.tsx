@@ -24,9 +24,9 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 	async function handleDisplayImageChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const file = e.target.files?.[0];
 		if (!file) return;
-		if (file.size > 2 * 1024 * 1024) {
+		if (file.size > 1 * 1024 * 1024) {
 			toast.error("File size too large", {
-				description: "Please upload a file smaller than 2MB",
+				description: "Please upload a file smaller than 1MB",
 			});
 			return;
 		}
@@ -157,7 +157,7 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 											name="display_image"
 											accept=".jpg,.jpeg,.png"
 											placeholder="Upload display image"
-											maxFileSize="2MB"
+											maxFileSize="1MB"
 											onChange={handleDisplayImageChange}
 											required
 										/>
@@ -182,7 +182,7 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 											name="additional_images"
 											accept=".jpg,.jpeg,.png"
 											placeholder="Upload additional images"
-											maxFileSize="2MB"
+											maxFileSize="1MB"
 											onChange={handleAdditionalImagesChange}
 											multiple
 										/>

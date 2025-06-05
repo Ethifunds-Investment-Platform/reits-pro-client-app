@@ -70,9 +70,11 @@ export default React.memo(function Updates(props: Project) {
 										<div className="p-4" key={item.id}>
 											<div className="flex items-center justify-between mb-2">
 												<h3 className="font-medium text-navy-800">{item.title}</h3>
-												<span className="text-sm text-gray-500">{new Date(item.created_at).toLocaleDateString("default", {
-													dateStyle:"long"
-												})}</span>
+												<span className="text-sm text-gray-500">
+													{new Date(item.created_at).toLocaleDateString("default", {
+														dateStyle: "long",
+													})}
+												</span>
 											</div>
 											<p className="text-gray-600 text-sm">{item.content}</p>
 
@@ -81,11 +83,7 @@ export default React.memo(function Updates(props: Project) {
 													{item.images.map((image, index) => (
 														<div key={index} className="border rounded-md overflow-hidden">
 															<img
-																src={
-																	image.startsWith("data:")
-																		? image
-																		: `data:image/jpeg;base64,${image}`
-																}
+																src={image}
 																alt={`Update image ${index + 1}`}
 																className="w-full h-20 object-cover"
 															/>

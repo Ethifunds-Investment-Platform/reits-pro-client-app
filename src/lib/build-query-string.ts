@@ -10,7 +10,7 @@
 
 export default function buildQueryString(query: Record<string, any>): string {
   return Object.entries(query)
-    .filter(([_, value]) => value !== undefined)
+    .filter(([_, value]) => value !== undefined && value !== "")
     .map(([key, value]) => `${key}=${encodeURIComponent(value as string)}`)
     .join("&");
 }

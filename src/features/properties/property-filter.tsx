@@ -180,7 +180,7 @@ const PropertyFilter = ({
 								<Slider
 									id="min-investment"
 									defaultValue={[0]}
-									max={100000}
+									max={10000000}
 									step={5000}
 									value={[localFilters.minInvestment]}
 									onValueChange={handleLocalMinInvestmentUpdate}

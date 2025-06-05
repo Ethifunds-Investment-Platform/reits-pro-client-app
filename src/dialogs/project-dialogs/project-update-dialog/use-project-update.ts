@@ -59,12 +59,19 @@ export default function useProjectUpdate() {
 	const handleImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
 		if (!files || files.length === 0) return;
+		const acceptedFiles = Array.from(files).filter((file) => file.size <= 1 * 1024 * 1024);
+		if (acceptedFiles.length !== files.length) {
+			toast.error("File size too large", {
+				description: "Please upload a file smaller than 1MB",
+			});
+			return;
+		}
 
 		try {
 			const newImages: Array<{ file: File; preview: string }> = [];
 			const base64Images: string[] = [];
 
-			for (const file of Array.from(files)) {
+			for (const file of acceptedFiles) {
 				const base64 = await blobReader(file);
 				const metadata = `${file.type}|${file.size}`;
 				const fullData = `${base64}|${metadata}`;

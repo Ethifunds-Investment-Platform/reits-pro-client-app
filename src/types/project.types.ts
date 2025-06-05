@@ -82,6 +82,7 @@ export type NewProject = {
 	currency_id: string;
 	funding_goal: number;
 	expected_roi: number;
+	paystack_product_url: string;
 	minimum_investment: number;
 	maximum_investment: number;
 	tenor_unit: TenorUnit;
