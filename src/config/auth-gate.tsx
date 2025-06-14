@@ -20,6 +20,7 @@ export default React.memo(function AuthGate({ children }: { children: React.Reac
 			await logoutAccount();
 			deleteCookie();
 		} catch {
+			deleteCookie();
 			navigate("/");
 		}
 	}, []);
