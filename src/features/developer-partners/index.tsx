@@ -10,13 +10,29 @@ import { variables } from "@/constants";
 import getDevelopersMetrics from "@/services/developers/get-developers-metrics";
 import useAppSelector from "@/store/hooks";
 import { amountSeparator } from "@/lib/amount-separator";
+import useCustomNavigation from "@/hooks/use-navigation";
+import { toast } from "sonner";
 
 const DeveloperPartners = () => {
+	const { account } = useAppSelector("account");
 	const { activeCurrency } = useAppSelector("init");
 	const { data, isFetching, isError, error } = useQuery({
 		queryKey: ["developers-metrics"],
 		queryFn: () => getDevelopersMetrics(),
 	});
+
+	const { navigate } = useCustomNavigation();
+	const submitProject = () => {
+		if (!account?.id) {
+			toast.info("Please login to submit a project");
+			return;
+		}
+		if (account.role !== "developer") {
+			toast.info("Please your account is not a developer account");
+			return;
+		}
+		navigate("/developer/projects/create");
+	};
 
 	const symbol = activeCurrency.symbol ?? "";
 
@@ -87,14 +103,18 @@ const DeveloperPartners = () => {
 								Are you a developer looking to raise capital for your next project? REITpro connects
 								quality developers with our network of investors.
 							</p>
-							<Button className="bg-gold-500 hover:bg-gold-600 text-navy-900 font-semibold">
-								<Link
+							<Button
+								className="bg-gold-500 hover:bg-gold-600 text-navy-900 font-semibold"
+								onClick={submitProject}
+							>
+								Submit Your Project
+								{/* <Link
 									to={variables.CONTACTS.partner_with_us}
 									target="_blank"
 									// className="!bg-gold-500 hover:bg-gold-600 text-navy-900 font-semibold"
 								>
 									Submit Your Project
-								</Link>
+								</Link> */}
 							</Button>
 						</div>
 					</div>

@@ -27,7 +27,7 @@ export default React.memo(function Details(props: Project) {
 										<div>
 											<h3 className="font-medium text-navy-800">Minimum Investment</h3>
 											<p className="text-gray-600">
-												{props.currency.symbol} {props.minimum_investment.toLocaleString()}
+												{props.currency.symbol} {props?.minimum_investment?.toLocaleString() ?? 0}
 											</p>
 										</div>
 									</div>

@@ -81,9 +81,7 @@ export default React.memo(function Updates(props: Project) {
 														<div key={index} className="border rounded-md overflow-hidden">
 															<img
 																src={
-																	image.startsWith("data:")
-																		? image
-																		: `data:image/jpeg;base64,${image}`
+																	image
 																}
 																alt={`Update image ${index + 1}`}
 																className="w-full h-20 object-cover"
