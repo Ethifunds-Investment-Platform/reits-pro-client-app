@@ -9,4 +9,4 @@ export default function Dialogs() {
 			<LogoutDialog />
 		</React.Fragment>
 	);
-}
+};
