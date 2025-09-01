@@ -52,7 +52,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
               : "bg-navy-600 hover:bg-navy-700"
           }`}
         >
-          {type === "development" ? "Development" : "Completed"}
+          {type === "development" ? "Ongoing" : "Completed"}
         </Badge>
       </Link>
       

@@ -7,6 +7,7 @@ import ProjectTabs from "./project-tabs";
 import AppContainer from "@/components/app/container/container";
 import Render from "@/components/app/render";
 import * as React from "react";
+import { ArrowLeft, Pencil } from "lucide-react";
 
 export default function ProjectDetails() {
 	const { data, isFetching, isError, error } = useProjectDetails();
@@ -19,6 +20,20 @@ export default function ProjectDetails() {
 				error={error}
 				loadingComponent={<LoadingComponent />}
 			>
+				<div className="flex items-center gap-4 mb-6 justify-between">
+					<Button variant="outline" size="sm" asChild>
+						<Link to="/developer/projects">
+							<ArrowLeft className="h-4 w-4 mr-1" />
+							Back to Projects
+						</Link>
+					</Button>
+
+					{data && (
+						<Button variant="default" size="sm" asChild>
+							<Link to={`/developer/projects/${data.id}/update`}>Update Project</Link>
+						</Button>
+					)}
+				</div>
 				{!data ? (
 					<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-screen">
 						<div className="text-center py-16">

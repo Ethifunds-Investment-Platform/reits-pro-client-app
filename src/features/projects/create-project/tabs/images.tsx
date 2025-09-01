@@ -3,13 +3,16 @@ import { UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { TabsContent } from "@/components/ui/tabs";
 import FileInput from "@/components/ui/form-input/file-input";
-import blobReader from "@/lib/blob-reader";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 type ProjectFormImagesTabProps = {
 	form: UseFormReturn<any>;
+	existingImages?: {
+		displayImageUrl?: string;
+		imageUrls: string[];
+	};
 };
 
 type FileWithPreview = {
@@ -17,11 +20,16 @@ type FileWithPreview = {
 	preview: string;
 };
 
-export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps) {
-	const [displayImagePreview, setDisplayImagePreview] = useState<string | null>(null);
+export default function ProjectFormImagesTab({ form, existingImages }: ProjectFormImagesTabProps) {
+	const [displayImagePreview, setDisplayImagePreview] = useState<string | null>(
+		existingImages?.displayImageUrl || null
+	);
 	const [additionalImages, setAdditionalImages] = useState<FileWithPreview[]>([]);
+	const [existingImagePreviews, setExistingImagePreviews] = useState<string[]>(
+		existingImages?.imageUrls || []
+	);
 
-	async function handleDisplayImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+	function handleDisplayImageChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const file = e.target.files?.[0];
 		if (!file) return;
 		if (file.size > 1 * 1024 * 1024) {
@@ -31,21 +39,14 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 			return;
 		}
 
-		try {
-			const base64 = await blobReader(file);
-			const metadata = `${file.type}|${file.size}`;
-			const fullData = `${base64}|${metadata}`;
-
-			form.setValue("display_image", fullData);
-			setDisplayImagePreview(URL.createObjectURL(file));
-		} catch (error) {
-			console.error("Error processing display image:", error);
-		}
+		// Set the File object directly in the form
+		form.setValue("display_image", file);
+		setDisplayImagePreview(URL.createObjectURL(file));
 	}
 
 	function handleRemoveDisplayImage() {
 		// Clear the display image
-		form.setValue("display_image", "");
+		form.setValue("display_image", undefined);
 
 		// Remove preview
 		if (displayImagePreview) {
@@ -54,39 +55,30 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 		}
 	}
 
-	async function handleAdditionalImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
+	function handleAdditionalImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const files = e.target.files;
 		if (!files || files.length === 0) return;
 
 		// Limit to max 5 files
 		const fileArray = Array.from(files).slice(0, 5);
 
-		try {
-			const newImages: FileWithPreview[] = [];
-			const base64Images: string[] = [];
+		const newImages: FileWithPreview[] = [];
 
-			for (const file of fileArray) {
-				const base64 = await blobReader(file);
-				const metadata = `${file.type}|${file.size}`;
-				const fullData = `${base64}|${metadata}`;
-
-				base64Images.push(fullData);
-				newImages.push({
-					file,
-					preview: URL.createObjectURL(file),
-				});
-			}
-
-			form.setValue("images", base64Images);
-			setAdditionalImages(newImages);
-		} catch (error) {
-			console.error("Error processing additional images:", error);
+		for (const file of fileArray) {
+			newImages.push({
+				file,
+				preview: URL.createObjectURL(file),
+			});
 		}
+
+		// Set File objects directly in the form
+		form.setValue("images", fileArray);
+		setAdditionalImages(newImages);
 	}
 
 	function handleRemoveAdditionalImage(index: number) {
 		// Remove the image from the form value
-		const formImages = form.getValues("images") as string[];
+		const formImages = form.getValues("images") as File[];
 		const newFormImages = [...formImages];
 		newFormImages.splice(index, 1);
 		form.setValue("images", newFormImages);
@@ -109,6 +101,14 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 			if (img.preview) URL.revokeObjectURL(img.preview);
 		});
 		setAdditionalImages([]);
+		setExistingImagePreviews([]);
+	}
+
+	function handleRemoveExistingImage(index: number) {
+		// Remove from existing images preview
+		const newExistingImages = [...existingImagePreviews];
+		newExistingImages.splice(index, 1);
+		setExistingImagePreviews(newExistingImages);
 	}
 
 	// Clean up object URLs on unmount
@@ -177,7 +177,7 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 							<FormLabel>Additional Images (Up to 5)</FormLabel>
 							<FormControl>
 								<div className="space-y-4">
-									{additionalImages.length === 0 ? (
+									{additionalImages.length === 0 && existingImagePreviews.length === 0 ? (
 										<FileInput
 											name="additional_images"
 											accept=".jpg,.jpeg,.png"
@@ -190,7 +190,8 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 										<div className="border rounded-md p-3">
 											<div className="flex justify-between items-center mb-3">
 												<h4 className="text-sm font-medium">
-													Additional Images ({additionalImages.length}/5)
+													Additional Images (
+													{additionalImages.length + existingImagePreviews.length}/5)
 												</h4>
 												<div className="flex space-x-2">
 													<Button
@@ -222,8 +223,38 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 											</div>
 
 											<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+												{/* Existing Images */}
+												{existingImagePreviews.map((imageUrl, index) => (
+													<div
+														key={`existing-${index}`}
+														className="relative border rounded-md overflow-hidden"
+													>
+														<Button
+															type="button"
+															variant="ghost"
+															size="sm"
+															onClick={() => handleRemoveExistingImage(index)}
+															className="absolute top-1 right-1 p-1 bg-white/80 text-red-500 hover:bg-white hover:text-red-700 rounded-full flex items-center justify-center size-6"
+														>
+															<X className="h-3 w-3" />
+														</Button>
+														<img
+															src={imageUrl}
+															alt={`Existing Image ${index + 1}`}
+															className="h-40 w-full object-cover"
+														/>
+														<div className="absolute bottom-1 left-1 px-2 py-1 bg-blue-500 text-white text-xs rounded">
+															Existing
+														</div>
+													</div>
+												))}
+
+												{/* New Images */}
 												{additionalImages.map((img, index) => (
-													<div key={index} className="relative border rounded-md overflow-hidden">
+													<div
+														key={`new-${index}`}
+														className="relative border rounded-md overflow-hidden"
+													>
 														<Button
 															type="button"
 															variant="ghost"
@@ -235,9 +266,12 @@ export default function ProjectFormImagesTab({ form }: ProjectFormImagesTabProps
 														</Button>
 														<img
 															src={img.preview}
-															alt={`Image ${index + 1}`}
+															alt={`New Image ${index + 1}`}
 															className="h-40 w-full object-cover"
 														/>
+														<div className="absolute bottom-1 left-1 px-2 py-1 bg-green-500 text-white text-xs rounded">
+															New
+														</div>
 													</div>
 												))}
 											</div>

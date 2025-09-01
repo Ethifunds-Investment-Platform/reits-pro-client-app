@@ -1,58 +1,101 @@
-import  { useEffect } from "react";
-import { ArrowLeft, Check, Loader2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { ArrowLeft, Save, Loader2 } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import AppContainer from "@/components/app/container/container";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
-
+	FormMessage,
+	FormLabel,
+	FormItem,
+	FormField,
+	FormControl,
 } from "@/components/ui/form";
 import { Link } from "react-router-dom";
-import ProjectFormBasicDetails from "./tabs/basic-details";
-import ProjectFormFinancialDetails from "./tabs/financial-details";
-import ProjectFormImagesTab from "./tabs/images";
-import ProjectFormLocationTab from "./tabs/location";
-import ProjectFormAnalysisTab from "./tabs/analysis";
+import ProjectFormBasicDetails from "../create-project/tabs/basic-details";
+import ProjectFormFinancialDetails from "../create-project/tabs/financial-details";
+import ProjectFormImagesTab from "../create-project/tabs/images";
+import ProjectFormLocationTab from "../create-project/tabs/location";
+import ProjectFormAnalysisTab from "../create-project/tabs/analysis";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useCreateProject } from "./use-create-project";
+import { useUpdateProject } from "./use-update-project";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function CreateProject() {
+export default function UpdateProject() {
 	const navigate = useNavigate();
+	const { id } = useParams<{ id: string }>();
 	const {
 		form,
 		activeTab,
 		setActiveTab,
 		isSubmitting,
+		isLoading,
+		existingImages,
+		existingDocuments,
 		handleSubmit,
 		setupErrorHandling,
 		goToNextTab,
 		goToPreviousTab,
 		tabs,
-	} = useCreateProject();
+	} = useUpdateProject();
 
 	// Setup form error handling
 	useEffect(() => {
 		const subscription = setupErrorHandling();
 		return () => subscription.unsubscribe();
-	}, []);
+	}, [setupErrorHandling]);
+
+	// Loading state while fetching project data
+	if (isLoading) {
+		return (
+			<AppContainer>
+				<div className="mb-8">
+					<div className="flex items-center gap-4 mb-6">
+						<Button variant="outline" size="sm" asChild>
+							<Link to={`/developer/projects/${id}`}>
+								<ArrowLeft className="h-4 w-4 mr-1" />
+								Back to Project
+							</Link>
+						</Button>
+					</div>
+
+					<h1 className="text-2xl font-bold text-navy-800">Update Project</h1>
+					<p className="text-gray-600 mt-2">Loading project data...</p>
+				</div>
+
+				<Card className="space-y-6">
+					<CardContent className="p-6">
+						<div className="space-y-4">
+							<Skeleton className="h-8 w-full" />
+							<Skeleton className="h-32 w-full" />
+							<div className="grid grid-cols-2 gap-4">
+								<Skeleton className="h-8 w-full" />
+								<Skeleton className="h-8 w-full" />
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+			</AppContainer>
+		);
+	}
 
 	return (
 		<AppContainer>
 			<div className="mb-8">
 				<div className="flex items-center gap-4 mb-6">
 					<Button variant="outline" size="sm" asChild>
-						<Link to="/developer/projects">
+						<Link to={`/developer/projects/${id}`}>
 							<ArrowLeft className="h-4 w-4 mr-1" />
-							Back to Projects
+							Back to Project
 						</Link>
 					</Button>
 				</div>
 
-				<h1 className="text-2xl font-bold text-navy-800">Create New Project</h1>
+				<h1 className="text-2xl font-bold text-navy-800">Update Project</h1>
 				<p className="text-gray-600 mt-2">
-					Fill in the details below to create a new property development project
+					Update the details of your property development project
 				</p>
 			</div>
 
@@ -65,27 +108,22 @@ export default function CreateProject() {
 								{...form.register("paystack_product_url")}
 								className="w-1/3"
 							/>
-							{/* <Input
-								placeholder="Enter Paystack product URL here"
-								{...form.register("paystack_product_url")}
-								className="w-1/3"
-							/> */}
 
 							<Button
 								type="submit"
 								form="project-form"
 								disabled={isSubmitting}
-								className="bg-navy-800 hover:bg-navy-700 "
+								className="bg-navy-800 hover:bg-navy-700"
 							>
 								{isSubmitting ? (
 									<>
 										<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-										Creating...
+										Updating...
 									</>
 								) : (
 									<>
-										<Check className="mr-2 h-4 w-4" />
-										Create Project
+										<Save className="mr-2 h-4 w-4" />
+										Update Project
 									</>
 								)}
 							</Button>
@@ -106,9 +144,9 @@ export default function CreateProject() {
 
 								<ProjectFormFinancialDetails form={form} />
 
-								<ProjectFormImagesTab form={form} />
+								<ProjectFormImagesTab form={form} existingImages={existingImages} />
 
-								<ProjectFormAnalysisTab form={form} />
+								<ProjectFormAnalysisTab form={form} existingDocuments={existingDocuments} />
 							</Tabs>
 						</CardContent>
 					</form>
@@ -122,7 +160,11 @@ export default function CreateProject() {
 					)}
 
 					<div className="ml-auto flex space-x-2">
-						<Button type="button" variant="outline" onClick={() => navigate("/developer/projects")}>
+						<Button
+							type="button"
+							variant="outline"
+							onClick={() => navigate(`/developer/projects/${id}`)}
+						>
 							Cancel
 						</Button>
 

@@ -64,7 +64,7 @@ const Navbar = () => {
 							to="/properties"
 							className="block px-3 py-2 rounded-md text-base font-medium text-navy-600 hover:text-navy-800 hover:bg-navy-50"
 						>
-							Properties
+							Investments
 						</Link>
 						<Link
 							to="/developers"

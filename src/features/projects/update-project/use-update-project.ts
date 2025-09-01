@@ -1,30 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
-import { projectFormSchema } from "./schema";
-import createProject from "@/services/developer/create-project";
+import { updateProjectFormSchema } from "./schema";
+import updateProject from "@/services/developer/update-project";
+import getProjectById from "@/services/developer/get-project-by-id";
 import useAppSelector from "@/store/hooks";
 import { DistributionFrequency, NewProject, ProjectType, TenorUnit } from "@/types/project.types";
 import ensureError from "@/lib/ensure-error";
+import {
+	transformProjectToFormData,
+	extractImageUrls,
+	extractDocumentUrls,
+} from "./utils/data-transformer";
 
-type FormValues = z.infer<typeof projectFormSchema>;
+type FormValues = z.infer<typeof updateProjectFormSchema>;
 
-export function useCreateProject() {
+export function useUpdateProject() {
 	const { account } = useAppSelector("account");
+	const { id } = useParams<{ id: string }>();
 	const [activeTab, setActiveTab] = useState("basic-details");
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
+	const [existingImages, setExistingImages] = useState<{
+		displayImageUrl?: string;
+		imageUrls: string[];
+	}>({ imageUrls: [] });
+	const [existingDocuments, setExistingDocuments] = useState<{
+		project_memo?: string | null;
+		developer_track_record?: string | null;
+		market_analysis?: string | null;
+		financial_projections?: string | null;
+	}>({});
 	const navigate = useNavigate();
 
 	const form = useForm<FormValues>({
-		resolver: zodResolver(projectFormSchema),
+		resolver: zodResolver(updateProjectFormSchema),
 		defaultValues: {
 			name: "",
 			description: "",
 			type: "development" as ProjectType,
-			display_image: undefined, // Will be set when file is selected
+			display_image: undefined,
 			location: {
 				country: "",
 				state: "",
@@ -37,7 +55,7 @@ export function useCreateProject() {
 			funding_goal: 0,
 			expected_roi: 0,
 			minimum_investment: 0,
-			maximum_investment: null,
+			maximum_investment: 0,
 			tenor_unit: "months" as TenorUnit,
 			tenor_value: 12,
 			distribution_frequency: "monthly" as DistributionFrequency,
@@ -45,15 +63,53 @@ export function useCreateProject() {
 		},
 	});
 
+	// Fetch and populate project data
+	useEffect(() => {
+		async function fetchProjectData() {
+			if (!id) {
+				toast.error("Project ID is required");
+				navigate("/developer/projects");
+				return;
+			}
+
+			try {
+				setIsLoading(true);
+				const project = await getProjectById({ project_id: id });
+
+				console.log(project);
+				// Transform server data to form data
+				const formData = transformProjectToFormData(project);
+
+				// Reset form with the fetched data
+				form.reset(formData);
+
+				// Extract image URLs for display
+				const imageData = extractImageUrls(project);
+				setExistingImages(imageData);
+
+				// Extract document URLs for display
+				const documentData = extractDocumentUrls(project);
+				setExistingDocuments(documentData);
+			} catch (error) {
+				const errMsg = ensureError(error).message;
+				toast.error(`Failed to load project: ${errMsg}`);
+				navigate("/developer/projects");
+			} finally {
+				setIsLoading(false);
+			}
+		}
+
+		fetchProjectData();
+	}, [id, form, navigate]);
+
 	const handleSubmit = async (values: FormValues) => {
 		if (!account?.id) {
-			toast.error("Please log in to create a project");
+			toast.error("Please log in to update project");
 			return;
 		}
 
-		// Validate that display image is selected
-		if (!values.display_image) {
-			toast.error("Please select a display image");
+		if (!id) {
+			toast.error("Project ID is required");
 			return;
 		}
 
@@ -70,12 +126,13 @@ export function useCreateProject() {
 				.map((item) => item.trim())
 				.filter(Boolean);
 
-			// Format the data to match the NewProject type
-			const formattedData: NewProject = {
+			// Format the data to match the NewProject type with id
+			const formattedData: NewProject & { id: string } = {
+				id,
 				name: values.name,
 				description: values.description,
 				type: values.type as ProjectType,
-				display_image: values.display_image,
+				display_image: values.display_image || (existingImages.displayImageUrl as any), // Will be handled by backend
 				location: {
 					country: values.location.country,
 					state: values.location.state,
@@ -101,9 +158,9 @@ export function useCreateProject() {
 				financial_projections: values.financial_projections || null,
 			};
 
-			const projectResponse = await createProject(formattedData);
+			const projectResponse = await updateProject(formattedData);
 			if (projectResponse) {
-				toast.success("Project created successfully! Redirecting to project page...");
+				toast.success("Project updated successfully! Redirecting to project page...");
 				navigate(`/developer/projects/${projectResponse.id}`);
 			}
 		} catch (error) {
@@ -153,6 +210,9 @@ export function useCreateProject() {
 		activeTab,
 		setActiveTab,
 		isSubmitting,
+		isLoading,
+		existingImages,
+		existingDocuments,
 		handleSubmit,
 		setupErrorHandling,
 		goToNextTab,

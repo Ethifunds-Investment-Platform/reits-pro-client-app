@@ -4,14 +4,13 @@ import useActions from "@/store/actions";
 import useAppSelector from "@/store/hooks";
 import createProjectUpdate from "@/services/developer/create-project-update";
 import ensureError from "@/lib/ensure-error";
-import blobReader from "@/lib/blob-reader";
 import { z } from "zod";
 
 // Define validation schema using Zod
 const updateValidation = z.object({
 	title: z.string().min(1, "Title is required"),
 	content: z.string().min(1, "Content is required"),
-	images: z.array(z.string()).optional(),
+	images: z.array(z.instanceof(File)).optional(),
 	project_id: z.string().min(1, "Project ID is required"),
 });
 
@@ -56,7 +55,7 @@ export default function useProjectUpdate() {
 		setFormData((prev) => ({ ...prev, [key]: value }));
 	};
 
-	const handleImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
 		if (!files || files.length === 0) return;
 		const acceptedFiles = Array.from(files).filter((file) => file.size <= 1 * 1024 * 1024);
@@ -67,32 +66,22 @@ export default function useProjectUpdate() {
 			return;
 		}
 
-		try {
-			const newImages: Array<{ file: File; preview: string }> = [];
-			const base64Images: string[] = [];
+		const newImages: Array<{ file: File; preview: string }> = [];
 
-			for (const file of acceptedFiles) {
-				const base64 = await blobReader(file);
-				const metadata = `${file.type}|${file.size}`;
-				const fullData = `${base64}|${metadata}`;
-
-				base64Images.push(fullData);
-				newImages.push({
-					file,
-					preview: URL.createObjectURL(file),
-				});
-			}
-
-			updateForm("images", [...(formData.images || []), ...base64Images]);
-			setUploadedImages((prev) => [...prev, ...newImages]);
-		} catch (error) {
-			console.error("Error processing images:", error);
-			toast.error("Failed to process images");
+		for (const file of acceptedFiles) {
+			newImages.push({
+				file,
+				preview: URL.createObjectURL(file),
+			});
 		}
+
+		// Store File objects directly
+		updateForm("images", [...(formData.images || []), ...acceptedFiles]);
+		setUploadedImages((prev) => [...prev, ...newImages]);
 	};
 
 	const handleRemoveImage = (index: number) => {
-		const newImages = [...(formData.images || [])];
+		const newImages = [...(formData.images || [])] as File[];
 		newImages.splice(index, 1);
 		updateForm("images", newImages);
 

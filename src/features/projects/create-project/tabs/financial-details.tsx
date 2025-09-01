@@ -114,7 +114,7 @@ export default function ProjectFormFinancialDetails({ form }: ProjectFormFinanci
 						name="maximum_investment"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Maximum Investment*</FormLabel>
+								<FormLabel>Maximum Investment</FormLabel>
 								<FormControl>
 									<Input
 										type="text"
@@ -234,7 +234,7 @@ export default function ProjectFormFinancialDetails({ form }: ProjectFormFinanci
 						name="funding_deadline"
 						render={({ field }) => (
 							<FormItem className="flex flex-col">
-								<FormLabel>Funding Deadline</FormLabel>
+								<FormLabel>Funding Deadline*</FormLabel>
 								<Popover>
 									<PopoverTrigger asChild>
 										<FormControl>

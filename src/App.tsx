@@ -25,6 +25,7 @@ import HomeLayout from "./layouts/home.layout";
 import ProjectsPage from "./pages/developer/projects";
 import ProjectDetailsPage from "./pages/developer/projects/project-details";
 import CreateProjectPage from "./pages/developer/projects/create";
+import UpdateProjectPage from "./pages/developer/projects/update";
 
 // Investor Dashboard
 import InvestorDashboardPage from "./pages/investor/dashboard";
@@ -62,6 +63,7 @@ const App = () => {
 						<Route path="/developer/dashboard" element={<DeveloperDashboardPage />} />
 						<Route path="/developer/projects" element={<ProjectsPage />} />
 						<Route path="/developer/projects/create" element={<CreateProjectPage />} />
+						<Route path="/developer/projects/:id/update" element={<UpdateProjectPage />} />
 						<Route path="/developer/projects/:id" element={<ProjectDetailsPage />} />
 						<Route path="/profile/developer" element={<DeveloperProfile />} />
 					</Route>

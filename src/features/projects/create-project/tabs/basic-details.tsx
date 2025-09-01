@@ -105,7 +105,7 @@ export default function ProjectFormBasicDetails({ form }: ProjectFormBasicDetail
 						name="risk_factors"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Risk Factors*</FormLabel>
+								<FormLabel>Risk Factors</FormLabel>
 								<FormControl>
 									<Textarea
 										placeholder="Enter risk factors (separated by commas)"

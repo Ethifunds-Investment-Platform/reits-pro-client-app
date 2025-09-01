@@ -3,13 +3,18 @@ import { UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { TabsContent } from "@/components/ui/tabs";
 import FileInput from "@/components/ui/form-input/file-input";
-import blobReader from "@/lib/blob-reader";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 type ProjectFormAnalysisTabProps = {
 	form: UseFormReturn<any>;
+	existingDocuments?: {
+		project_memo?: string | null;
+		developer_track_record?: string | null;
+		market_analysis?: string | null;
+		financial_projections?: string | null;
+	};
 };
 
 type FileStatus = {
@@ -17,15 +22,30 @@ type FileStatus = {
 	isUploaded: boolean;
 };
 
-export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabProps) {
+export default function ProjectFormAnalysisTab({
+	form,
+	existingDocuments,
+}: ProjectFormAnalysisTabProps) {
 	const [fileStatus, setFileStatus] = useState<Record<string, FileStatus>>({
-		project_memo: { fileName: null, isUploaded: false },
-		developer_track_record: { fileName: null, isUploaded: false },
-		market_analysis: { fileName: null, isUploaded: false },
-		financial_projections: { fileName: null, isUploaded: false },
+		project_memo: {
+			fileName: existingDocuments?.project_memo ? "Existing Document" : null,
+			isUploaded: !!existingDocuments?.project_memo,
+		},
+		developer_track_record: {
+			fileName: existingDocuments?.developer_track_record ? "Existing Document" : null,
+			isUploaded: !!existingDocuments?.developer_track_record,
+		},
+		market_analysis: {
+			fileName: existingDocuments?.market_analysis ? "Existing Document" : null,
+			isUploaded: !!existingDocuments?.market_analysis,
+		},
+		financial_projections: {
+			fileName: existingDocuments?.financial_projections ? "Existing Document" : null,
+			isUploaded: !!existingDocuments?.financial_projections,
+		},
 	});
 
-	async function handleFileChange(fieldName: string, e: React.ChangeEvent<HTMLInputElement>) {
+	function handleFileChange(fieldName: string, e: React.ChangeEvent<HTMLInputElement>) {
 		const file = e.target.files?.[0];
 		if (!file) return;
 
@@ -36,24 +56,17 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 			return;
 		}
 
-		try {
-			const base64 = await blobReader(file);
-			const metadata = `${file.type}|${file.size}`;
-			const fullData = `${base64}|${metadata}`;
+		// Set the File object directly in the form
+		form.setValue(fieldName, file);
 
-			form.setValue(fieldName, fullData);
-
-			// Update file status
-			setFileStatus((prev) => ({
-				...prev,
-				[fieldName]: {
-					fileName: file.name,
-					isUploaded: true,
-				},
-			}));
-		} catch (error) {
-			console.error(`Error processing ${fieldName}:`, error);
-		}
+		// Update file status
+		setFileStatus((prev) => ({
+			...prev,
+			[fieldName]: {
+				fileName: file.name,
+				isUploaded: true,
+			},
+		}));
 	}
 
 	function handleRemoveFile(fieldName: string) {
@@ -72,10 +85,19 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 
 	function getFileStatusMessage(fieldName: string) {
 		const status = fileStatus[fieldName];
+		const existingDoc = existingDocuments?.[fieldName as keyof typeof existingDocuments];
+
 		if (status?.isUploaded && status?.fileName) {
+			if (existingDoc && status.fileName === "Existing Document") {
+				return "Existing Document";
+			}
 			return `Uploaded: ${status.fileName}`;
 		}
 		return null;
+	}
+
+	function hasExistingDocument(fieldName: string): boolean {
+		return !!existingDocuments?.[fieldName as keyof typeof existingDocuments];
 	}
 
 	return (
@@ -93,9 +115,23 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 								<div className="space-y-2">
 									{fileStatus.project_memo.isUploaded ? (
 										<div className="flex items-center justify-between p-3 border rounded-lg">
-											<p className="text-sm text-green-600">
-												{getFileStatusMessage("project_memo")}
-											</p>
+											<div className="flex items-center gap-2">
+												{hasExistingDocument("project_memo") ? (
+													<>
+														<div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+														<p className="text-sm text-blue-600">
+															{getFileStatusMessage("project_memo")}
+														</p>
+													</>
+												) : (
+													<>
+														<div className="w-2 h-2 bg-green-500 rounded-full"></div>
+														<p className="text-sm text-green-600">
+															{getFileStatusMessage("project_memo")}
+														</p>
+													</>
+												)}
+											</div>
 											<Button
 												type="button"
 												variant="ghost"
@@ -132,9 +168,23 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 								<div className="space-y-2">
 									{fileStatus.developer_track_record.isUploaded ? (
 										<div className="flex items-center justify-between p-3 border rounded-lg">
-											<p className="text-sm text-green-600">
-												{getFileStatusMessage("developer_track_record")}
-											</p>
+											<div className="flex items-center gap-2">
+												{hasExistingDocument("developer_track_record") ? (
+													<>
+														<div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+														<p className="text-sm text-blue-600">
+															{getFileStatusMessage("developer_track_record")}
+														</p>
+													</>
+												) : (
+													<>
+														<div className="w-2 h-2 bg-green-500 rounded-full"></div>
+														<p className="text-sm text-green-600">
+															{getFileStatusMessage("developer_track_record")}
+														</p>
+													</>
+												)}
+											</div>
 											<Button
 												type="button"
 												variant="ghost"
@@ -172,9 +222,23 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 									<div className="space-y-2">
 										{fileStatus.market_analysis.isUploaded ? (
 											<div className="flex items-center justify-between p-3 border rounded-lg">
-												<p className="text-sm text-green-600">
-													{getFileStatusMessage("market_analysis")}
-												</p>
+												<div className="flex items-center gap-2">
+													{hasExistingDocument("market_analysis") ? (
+														<>
+															<div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+															<p className="text-sm text-blue-600">
+																{getFileStatusMessage("market_analysis")}
+															</p>
+														</>
+													) : (
+														<>
+															<div className="w-2 h-2 bg-green-500 rounded-full"></div>
+															<p className="text-sm text-green-600">
+																{getFileStatusMessage("market_analysis")}
+															</p>
+														</>
+													)}
+												</div>
 												<Button
 													type="button"
 													variant="ghost"
@@ -211,9 +275,23 @@ export default function ProjectFormAnalysisTab({ form }: ProjectFormAnalysisTabP
 									<div className="space-y-2">
 										{fileStatus.financial_projections.isUploaded ? (
 											<div className="flex items-center justify-between p-3 border rounded-lg">
-												<p className="text-sm text-green-600">
-													{getFileStatusMessage("financial_projections")}
-												</p>
+												<div className="flex items-center gap-2">
+													{hasExistingDocument("financial_projections") ? (
+														<>
+															<div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+															<p className="text-sm text-blue-600">
+																{getFileStatusMessage("financial_projections")}
+															</p>
+														</>
+													) : (
+														<>
+															<div className="w-2 h-2 bg-green-500 rounded-full"></div>
+															<p className="text-sm text-green-600">
+																{getFileStatusMessage("financial_projections")}
+															</p>
+														</>
+													)}
+												</div>
 												<Button
 													type="button"
 													variant="ghost"
