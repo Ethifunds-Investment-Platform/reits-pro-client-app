@@ -29,6 +29,8 @@ export default function InvestDialog() {
 		expectedReturn,
 		isValidAmount,
 		numericAmount,
+		proceed,
+		setProceed,
 	} = useInvest();
 
 	const { queryParams } = useCustomNavigation();
@@ -45,10 +47,7 @@ export default function InvestDialog() {
 		};
 	}, [hasAction]);
 
-
-
 	return (
-		
 		<ErrorBoundary>
 			<AppDialog
 				open={open}

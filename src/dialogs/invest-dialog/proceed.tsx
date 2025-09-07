@@ -14,14 +14,13 @@ type Props = {
 export default React.memo(function Proceed(props: Props) {
 	const { account } = useAppSelector("account");
 	const { params, queryParams } = useCustomNavigation();
-	const project_id = params.id as string;
+	const { ui } = useActions();
 
 	const amount = props.amount || 0;
-	const { ui } = useActions();
 
 	const hasAction = React.useMemo(() => queryParams.has("action", "pay_now"), [queryParams]);
 
-	const initiate = hasAction && project_id && account?.id && amount > 0;
+	const initiate = hasAction && account?.id && amount > 0;
 
 	const project = props.project;
 
@@ -35,7 +34,9 @@ export default React.memo(function Proceed(props: Props) {
 	const paystackInstance = new PaystackPop();
 
 	const onSuccess = React.useCallback(() => {
+		handleClose();
 		ui.changeDialog({
+			show:true,
 			type: "success",
 			data: {
 				title: "Investment Successful",
@@ -44,18 +45,26 @@ export default React.memo(function Proceed(props: Props) {
 				}${amount.toLocaleString()} in ${project?.name}. Do check your email for more details.`,
 			},
 		});
-		handleClose();
 	}, []);
 
 	const onCancel = React.useCallback(() => {
+		ui.changeDialog({
+			show: true,
+			type: "invest_now",
+		});
 		toast({
 			title: "Transaction Cancelled",
 			description: "Investment transaction was cancelled.",
 		});
+
 		handleClose();
 	}, []);
 
 	const onError = React.useCallback((params: { message: string }) => {
+		ui.changeDialog({
+			show: true,
+			type: "invest_now",
+		});
 		toast({
 			title: "Payment Error",
 			description: params.message || "An error occurred while processing your payment.",
@@ -87,7 +96,7 @@ export default React.memo(function Proceed(props: Props) {
 				{
 					display_name: "Project ID",
 					variable_name: "project_id",
-					value: project_id,
+					value: project.id,
 				},
 			],
 		},
