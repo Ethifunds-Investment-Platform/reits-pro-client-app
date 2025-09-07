@@ -8,7 +8,7 @@ const stringToArray = (val: string) =>
 		.map((item) => item.trim())
 		.filter(Boolean);
 
-export const projectFormSchema = z.object({
+export const updateProjectFormSchema = z.object({
 	name: z.string().min(3, "Project name must be at least 3 characters"),
 	description: z.string().min(10, "Description must be at least 10 characters"),
 	location: z.object({
@@ -17,7 +17,8 @@ export const projectFormSchema = z.object({
 		fullAddress: z.string().optional(),
 	}),
 	paystack_product_url: z.string().min(1, "Paystack product URL is required"),
-	display_image: z.instanceof(File, { message: "Display image is required" }),
+	// Make display_image optional for updates since there's already an existing one
+	display_image: z.instanceof(File).optional(),
 	images: z.array(z.instanceof(File)).optional(),
 	risk_factors: z.string().optional(),
 	property_highlights: z.string().min(1, "At least one property highlight is required"),
@@ -27,8 +28,8 @@ export const projectFormSchema = z.object({
 	minimum_investment: z.number().positive("Minimum investment must be a positive number"),
 	maximum_investment: z
 		.number()
-		// .negative("Maximum investment must be a positive number")
-		.nullable(),
+		.positive("Maximum investment must be a positive number")
+		.optional(),
 	tenor_unit: z.enum(TENOR_UNITS as unknown as [string, ...string[]], {
 		message: "Tenor unit is required",
 	}),
@@ -40,6 +41,7 @@ export const projectFormSchema = z.object({
 	type: z.enum(PROJECT_TYPES as unknown as [string, ...string[]], {
 		message: "Type is required",
 	}),
+	// All document fields are optional for updates
 	project_memo: z
 		.union([z.string(), z.instanceof(File)])
 		.nullable()
@@ -57,3 +59,4 @@ export const projectFormSchema = z.object({
 		.nullable()
 		.optional(),
 });
+

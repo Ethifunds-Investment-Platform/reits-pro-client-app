@@ -35,17 +35,17 @@ export default function ContentSlider(props: Project) {
 			return;
 		}
 
-		// ui.changeDialog({
-		// 	show: true,
-		// 	type: "invest_now",
-		// 	data: { project: props },
-		// });
+		ui.changeDialog({
+			show: true,
+			type: "invest_now",
+			data: { project: props },
+		});
 
-		if (props.paystack_product_url) {
-			window.open(props.paystack_product_url, "_blank");
-		} else {
-			toast.error("No payment link found for this project. Please contact support.");
-		}
+		// if (props.paystack_product_url) {
+		// 	window.open(props.paystack_product_url, "_blank");
+		// } else {
+		// 	toast.error("No payment link found for this project. Please contact support.");
+		// }
 	};
 
 	return (

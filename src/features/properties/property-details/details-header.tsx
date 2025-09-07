@@ -19,7 +19,7 @@ export default function DetailsHeader(props: Project) {
 				</div>
 			</div>
 			<Badge className={badgeCn}>
-				{props.status !== "completed" ? "Development" : "Completed Property"}
+				{props.status !== "completed" ? "Ongoing" : "Completed Property"}
 			</Badge>
 		</div>
 	);

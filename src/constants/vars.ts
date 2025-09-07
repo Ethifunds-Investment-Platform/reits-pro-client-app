@@ -13,7 +13,7 @@ export type StorageKeys = {
 };
 
 export type Environment = "production" | "development";
-const NODE_ENV: Environment = "production";
+const NODE_ENV: Environment = import.meta.env.VITE_SERVICE_ENV || "production";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || "";
 const SERVER = BASE_URL + "/api/v1";

@@ -75,8 +75,8 @@ export type NewProject = {
 	description: string;
 	location: ProjectLocation;
 	type: ProjectType;
-	display_image: string;
-	images?: string[];
+	display_image: File;
+	images?: File[];
 	risk_factors: string[];
 	property_highlights: string[];
 	currency_id: string;
@@ -84,22 +84,22 @@ export type NewProject = {
 	expected_roi: number;
 	paystack_product_url: string;
 	minimum_investment: number;
-	maximum_investment: number;
+	maximum_investment: number | null;
 	tenor_unit: TenorUnit;
 	tenor_value: number;
 	funding_deadline: string | null;
 	distribution_frequency: DistributionFrequency;
-	project_memo: string | null;
-	developer_track_record: string | null;
-	market_analysis: string | null;
-	financial_projections: string | null;
+	project_memo: string | File | null;
+	developer_track_record: string | File | null;
+	market_analysis: string | File | null;
+	financial_projections: string | File | null;
 };
 
 export type NewProjectUpdate = {
 	project_id: string;
 	title: string;
 	content: string;
-	images: string[];
+	images: File[];
 };
 
 export type ProjectUpdate = {

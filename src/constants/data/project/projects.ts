@@ -24,6 +24,7 @@ export const projects: Project[] = [
 			fullAddress: "Plot 5, Admiralty Way, Lekki Phase 1",
 		},
 		display_image: propertyImages[0],
+		images: [...propertyImages],
 		risk_factors: [
 			"Market fluctuations in the Lagos real estate sector",
 			"Potential regulatory changes affecting residential developments",
