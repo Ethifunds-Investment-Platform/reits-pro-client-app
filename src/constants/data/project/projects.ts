@@ -49,7 +49,7 @@ export const projects: Project[] = [
 		funding_goal: 250000000,
 		amount_raised: 175000000,
 		expected_roi: 12.5,
-		minimum_investment: 500000,
+		minimum_investment: 500,
 		maximum_investment: 25000000,
 		tenor_unit: "months",
 		tenor_value: 24,

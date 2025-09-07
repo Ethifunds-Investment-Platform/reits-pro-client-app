@@ -15,6 +15,7 @@ type InvestFormValues = {
 export default function useInvest() {
 	const { dialog } = useAppSelector("ui");
 	const { account } = useAppSelector("account");
+	const [proceed, setProceed] = React.useState(false);
 	const { queryParams, params } = useCustomNavigation();
 	const { ui } = useActions();
 	const project_id = params.id as string;
@@ -73,7 +74,12 @@ export default function useInvest() {
 			});
 			return;
 		}
-		queryParams.set("action", "pay_now");
+		ui.changeDialog({
+			show: false,
+			type: "",
+		});
+		queryParams.set("action", "pay_now")
+		// setProceed(true);
 	};
 
 	const formatAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,6 +114,8 @@ export default function useInvest() {
 		onSubmit,
 		formatAmount,
 		expectedReturn,
+		setProceed,
+		proceed,
 		isValidAmount,
 		numericAmount,
 	};
