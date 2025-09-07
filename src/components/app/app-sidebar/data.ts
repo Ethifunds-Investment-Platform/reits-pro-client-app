@@ -59,7 +59,7 @@ export const sidebarLinks: SidebarLink[] = [
 		icon: IconContainer(ChartNoAxesCombined),
 		activeIcon: IconContainer(ChartNoAxesCombined, true),
 		relativePaths: [],
-		role: ["investor"],
+		role: ["investor","developer"],
 	},
 	{
 		name: "investments",
