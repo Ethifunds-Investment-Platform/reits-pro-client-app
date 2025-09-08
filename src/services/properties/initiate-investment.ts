@@ -1,9 +1,6 @@
 import { variables } from "@/constants";
 import axios from "@/lib/axios";
-import { PaginationQuery, PaginatedResponse } from "@/types/global.types";
-import buildQueryString from "@/lib/build-query-string";
-import { Project } from "@/types/project.types";
-import { projects } from "@/constants/data/project/projects";
+
 
 type Response = {
 	reference: string;
@@ -17,8 +14,8 @@ type Parameter = {
 
 
 export async function production(data: Parameter): Promise<Response> {
-	const query = buildQueryString(data);
-	const response = await axios.get(`/investments/purchase/initialize`);
+	
+	const response = await axios.post(`/investments/purchase/initialize`,data);
 	return response.data.data;
 }
 
