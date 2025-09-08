@@ -20,9 +20,10 @@ import * as React from "react";
 
 const AuthButtons = () => {
 	const { account } = useAppSelector("account");
-	const { deleteCookie } = useCookie(variables.STORAGE.session, "");
+	const { cookie: authToken, deleteCookie } = useCookie(variables.STORAGE.session, "");
 	const { navigate } = useCustomNavigation();
 	const { toast } = useToast();
+
 	const { account: accountActions, ui } = useActions();
 
 	const profilePath = React.useMemo(() => {
@@ -34,9 +35,9 @@ const AuthButtons = () => {
 
 	const handleLogoutConfirm = async () => {
 		try {
-			await logoutAccount();
+			await logoutAccount({ auth_token: authToken });
 			deleteCookie();
-			navigate("/",{replace: true});
+			navigate("/", { replace: true });
 			toast({
 				title: "Logged out",
 				description: "You have been logged out successfully",

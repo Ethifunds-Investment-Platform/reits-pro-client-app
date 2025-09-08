@@ -3,18 +3,33 @@ import axios from "@/lib/axios";
 
 type Response = void;
 
-export async function production(): Promise<Response> {
-  await axios.post(`/auth/logout`);
+type Parameter = {
+	auth_token?: string;
+};
+
+export async function production(data: Parameter): Promise<Response> {
+	const headers = {};
+
+	if (data.auth_token) {
+		headers["Authorization"] = `Bearer ${data?.auth_token}`;
+	}
+	await axios.post(
+		`/auth/logout`,
+		{},
+		{
+			headers,
+		}
+	);
 }
 
 export async function development(): Promise<Response> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(), 2000);
-  });
+	return new Promise((resolve) => {
+		setTimeout(() => resolve(), 2000);
+	});
 }
 
-export default async function logoutAccount(): Promise<Response> {
-  if (variables.NODE_ENV === "development") return development();
+export default async function logoutAccount(data: Parameter): Promise<Response> {
+	if (variables.NODE_ENV === "development") return development();
 
-  return production();
+	return production(data);
 }
