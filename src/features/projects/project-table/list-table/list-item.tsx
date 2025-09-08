@@ -31,7 +31,7 @@ export default function ListItem({ item }: ListItemProps) {
 					<Progress value={progress} />
 					<div className="text-sm text-gray-500 font-medium">
 						{currency}
-						{item.amount_raised.toLocaleString()} ({Math.round(progress)}%)
+						{item.amount_raised?.toLocaleString()} ({Math.round(progress)}%)
 					</div>
 				</div>
 				<div className="flex space-x-2 w-1/4">

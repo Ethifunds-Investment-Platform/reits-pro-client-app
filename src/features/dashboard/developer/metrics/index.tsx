@@ -14,7 +14,6 @@ export default function DeveloperMetrics() {
 
 	const currency = activeCurrency?.code ?? "NGN";
 
-	console.log(currency)
 
 	const cardData = [
 		{
@@ -30,7 +29,7 @@ export default function DeveloperMetrics() {
 		{
 			icon: <TrendingUp className="h-8 w-8 text-navy-600" />,
 			title: "Total Investment",
-			value: figureConverter(data?.total_investment ?? 0, { currency, precision: 2 }),
+			value: `${currency} ${data?.total_investment?.toLocaleString()}`,
 		},
 	];
 

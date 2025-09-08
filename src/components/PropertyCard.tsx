@@ -74,7 +74,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
           
           <div className="flex items-center justify-between text-sm text-gray-600">
-            <span>${price.toLocaleString()} total</span>
+            <span>${price?.toLocaleString()} total</span>
             <span>{fundingProgress}% Funded</span>
           </div>
         </div>
@@ -88,7 +88,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         
         <div className="flex items-center space-x-1 text-sm">
           <CircleDollarSign className="h-4 w-4 text-gold-500" />
-          <span className="text-gray-700">${minimumInvestment.toLocaleString()} Min</span>
+          <span className="text-gray-700">${minimumInvestment?.toLocaleString()} Min</span>
         </div>
         
         <div className="flex items-center space-x-1 text-sm">

@@ -30,7 +30,7 @@ export default function ContentSlider(props: Project) {
 										{Math.round(progress)}% Funded
 									</span>
 									<span className="text-sm text-gray-600">
-										{props.currency.symbol} {props.amount_raised.toLocaleString()}{" "}
+										{props.currency.symbol} {props?.amount_raised?.toLocaleString()}{" "}
 										{/* {figureConverter(props.amount_raised, {
 											currency: props.currency.code,
 										})}{" "} */}

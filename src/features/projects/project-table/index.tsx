@@ -65,7 +65,7 @@ export default function ProjectTable(props: TableProps) {
 								<Progress value={progress} />
 								<div className="text-xs text-gray-500">
 									{currency}
-									{item.amount_raised.toLocaleString()} ({Math.round(progress)}%)
+									{item.amount_raised?.toLocaleString()} ({Math.round(progress)}%)
 								</div>
 							</TableCell>
 							<TableCell className="hidden lg:table-cell">{amountSeparator(item.total_investors)}</TableCell>

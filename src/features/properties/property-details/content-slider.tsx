@@ -57,7 +57,7 @@ export default function ContentSlider(props: Project) {
 							<div>
 								<h3 className="text-2xl font-bold text-navy-800">
 									{props.currency.symbol}
-									{props.funding_goal.toLocaleString()}
+									{props?.funding_goal?.toLocaleString()}
 								</h3>
 								<p className="text-sm text-gray-600">Total Offering Size</p>
 							</div>
@@ -66,7 +66,7 @@ export default function ContentSlider(props: Project) {
 								<div className="flex items-center justify-between mb-2">
 									<span className="text-sm font-medium text-gray-700">{progress.toFixed(1)}% Funded</span>
 									<span className="text-sm text-gray-600">
-										{props.currency.symbol} {props.amount_raised.toLocaleString()}
+										{props.currency.symbol} {props?.amount_raised?.toLocaleString()}
 									</span>
 								</div>
 								<Progress value={progress} className="h-2" />
@@ -86,7 +86,7 @@ export default function ContentSlider(props: Project) {
 									<div className="flex items-center">
 										<CircleDollarSign className="h-4 w-4 text-gold-500 mr-1" />
 										<span className="font-semibold text-navy-800">
-											{props.currency.symbol} {props.minimum_investment.toLocaleString()}
+											{props.currency.symbol} {props?.minimum_investment?.toLocaleString()}
 										</span>
 									</div>
 								</div>
