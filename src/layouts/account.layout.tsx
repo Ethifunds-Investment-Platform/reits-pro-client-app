@@ -3,7 +3,7 @@ import SidebarHeader from "@/components/app/app-sidebar/sidebar-header";
 import Redirect from "@/components/app/redirect";
 import Render from "@/components/app/render";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import AuthGate from "@/config/auth-gate";
+import AuthGate, { AuthGateProvider } from "@/config/auth-gate";
 import Dialogs from "@/dialogs";
 import useCustomNavigation from "@/hooks/use-navigation";
 import useAppSelector from "@/store/hooks";
@@ -33,22 +33,24 @@ export default function AccountLayout(props: { requiredRole: UserRole }) {
 	}, [account.role, location.pathname, props.requiredRole]);
 
 	return (
-		<AuthGate>
-			<Render isLoading={isLoading}>
-				{restricted ? (
-					<Redirect to="/forbidden" />
-				) : (
-					<SidebarProvider>
-						<AppSidebar role={props.requiredRole} />
+		<AuthGateProvider>
+			<AuthGate>
+				<Render isLoading={isLoading}>
+					{restricted ? (
+						<Redirect to="/forbidden" />
+					) : (
+						<SidebarProvider>
+							<AppSidebar role={props.requiredRole} />
 
-						<main className="flex flex-col w-full">
-							<SidebarHeader />
-							<Outlet />
-						</main>
-						<Dialogs />
-					</SidebarProvider>
-				)}
-			</Render>
-		</AuthGate>
+							<main className="flex flex-col w-full">
+								<SidebarHeader />
+								<Outlet />
+							</main>
+							<Dialogs />
+						</SidebarProvider>
+					)}
+				</Render>
+			</AuthGate>
+		</AuthGateProvider>
 	);
 }
