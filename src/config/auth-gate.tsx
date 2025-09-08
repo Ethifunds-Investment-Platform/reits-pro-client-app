@@ -10,6 +10,7 @@ import * as React from "react";
 
 export default React.memo(function AuthGate({ children }: { children: React.ReactNode }) {
 	const [isLoading, setIsLoading] = React.useState(true);
+	const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 	const interceptor = React.useRef(0);
 	const { cookie: authToken, deleteCookie } = useCookie(variables.STORAGE.session, "");
 	const { account: accountActions } = useActions();
@@ -25,34 +26,51 @@ export default React.memo(function AuthGate({ children }: { children: React.Reac
 		}
 	}, []);
 
-	const session = React.useCallback(async () => {
-		setIsLoading(true);
-		if (!authToken) {
-			logout();
-			setIsLoading(false);
-			return;
+	// Setup interceptor function
+	const setupInterceptor = React.useCallback(() => {
+		if (interceptor.current !== null) {
+			// Remove existing interceptor first
+			axios.interceptors.request.eject(interceptor.current);
 		}
 
-		try {
+		if (authToken) {
 			const value = axios.interceptors.request.use(
 				(config) => {
 					try {
-						const accessToken = authToken;
-
-						config.headers.Authorization = `Bearer ${accessToken}`;
+						config.headers.Authorization = `Bearer ${authToken}`;
 						return config;
 					} catch (error) {
 						return Promise.reject(error);
 					}
 				},
-				(error) => {
-					return Promise.reject(error);
-				}
+				(error) => Promise.reject(error)
 			);
-
 			interceptor.current = value;
+		}
+	}, [authToken]);
+
+	const session = React.useCallback(async () => {
+	if (isAuthenticated) {
+		setIsLoading(false);
+		return;
+	}
+
+	setIsLoading(true);
+
+	if (!authToken) {
+		setIsAuthenticated(false);
+		setIsLoading(false);
+		return;
+	}
+
+
+		try {
+			
+
+				setupInterceptor();
 			const response = await whoami();
 			accountActions.changeAccount(response);
+			setIsAuthenticated(true);
 		} catch (error) {
 			logout();
 		} finally {
@@ -61,10 +79,21 @@ export default React.memo(function AuthGate({ children }: { children: React.Reac
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [authToken, logout]);
 
+	// Setup interceptor whenever authToken changes and user is authenticated
+	React.useEffect(() => {
+		if (isAuthenticated && authToken) {
+			setupInterceptor();
+		}
+	}, [authToken, isAuthenticated, setupInterceptor]);
+
 	React.useEffect(() => {
 		session();
+
+		// // Cleanup function
 		return () => {
-			axios.interceptors.request.eject(interceptor.current);
+			if (interceptor.current !== null) {
+				axios.interceptors.request.eject(interceptor.current);
+			}
 		};
 	}, []);
 
