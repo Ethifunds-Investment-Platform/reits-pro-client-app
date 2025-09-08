@@ -10,6 +10,7 @@ import useActions from "@/store/actions";
 type Props = {
 	amount: number;
 	project: Project;
+	paymentRef: string;
 };
 export default React.memo(function Proceed(props: Props) {
 	const { account } = useAppSelector("account");
@@ -17,6 +18,8 @@ export default React.memo(function Proceed(props: Props) {
 	const { ui } = useActions();
 
 	const amount = props.amount || 0;
+
+	const paymentRef = props.paymentRef;
 
 	const hasAction = React.useMemo(() => queryParams.has("action", "pay_now"), [queryParams]);
 
@@ -36,7 +39,7 @@ export default React.memo(function Proceed(props: Props) {
 	const onSuccess = React.useCallback(() => {
 		handleClose();
 		ui.changeDialog({
-			show:true,
+			show: true,
 			type: "success",
 			data: {
 				title: "Investment Successful",
@@ -81,6 +84,7 @@ export default React.memo(function Proceed(props: Props) {
 		firstName,
 		lastName,
 		amount: amount * 100, // Paystack expects amount in kobo (or lowest currency unit)
+		reference: paymentRef,
 		metadata: {
 			custom_fields: [
 				{
