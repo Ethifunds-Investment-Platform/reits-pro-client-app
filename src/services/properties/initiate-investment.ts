@@ -9,15 +9,17 @@ type Response = {
 type Parameter = {
 	project_id: string;
 	amount: number;
+	auth_token: string;
 };
 
-
-
 export async function production(data: Parameter): Promise<Response> {
-	
-	const response = await axios.post(`/investments/purchase/initialize`,data);
+	const response = await axios.post(`/investments/purchase/initialize`, data, {
+		headers: {
+			Authorization: `Bearer ${data.auth_token}`,
+		},
+	});
 	return response.data.data;
-}
+}	
 
 export async function development(): Promise<Response> {
 	return new Promise((resolve) => {

@@ -9,6 +9,8 @@ import getPropertiesById from "@/services/properties/get-properties-by-id";
 import { toast } from "@/hooks/use-toast";
 import ensureError from "@/lib/ensure-error";
 import initiateInvestment from "@/services/properties/initiate-investment";
+import useCookie from "@/hooks/use-cookie";
+import { variables } from "@/constants";
 
 type InvestFormValues = {
 	investmentAmount: string;
@@ -21,6 +23,8 @@ export default function useInvest() {
 	const { queryParams, params } = useCustomNavigation();
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [paymentRef, setPaymentRef] = React.useState<string | null>(null);
+	const { cookie: authToken, deleteCookie } = useCookie(variables.STORAGE.session, "");
+
 	const { ui } = useActions();
 	const project_id = params.id as string;
 
@@ -81,7 +85,7 @@ export default function useInvest() {
 		}
 		setIsLoading(true);
 		try {
-			const res = await initiateInvestment({ project_id, amount: numericAmount });
+			const res = await initiateInvestment({ project_id, amount: numericAmount, auth_token: authToken });
 			if (res.reference) {
 				setPaymentRef(res.reference);
 				ui.changeDialog({
