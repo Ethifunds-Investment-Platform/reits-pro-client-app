@@ -66,7 +66,7 @@ export default React.memo(function AuthGate({ children }: { children: React.Reac
 		return () => {
 			axios.interceptors.request.eject(interceptor.current);
 		};
-	}, [session]);
+	}, []);
 
 	if (isLoading) return <LoadingBox type="screen" load_type="spinner" />;
 
