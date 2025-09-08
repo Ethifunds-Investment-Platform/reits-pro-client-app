@@ -15,6 +15,7 @@ import Proceed from "./proceed";
 import ErrorBoundary from "@/components/app/error-boundary";
 import useCustomNavigation from "@/hooks/use-navigation";
 import Render from "@/components/app/render";
+
 export default function InvestDialog() {
 	const {
 		isFetching,
@@ -29,14 +30,14 @@ export default function InvestDialog() {
 		expectedReturn,
 		isValidAmount,
 		numericAmount,
-		proceed,
-		setProceed,
+		paymentRef,
+		isLoading,
 	} = useInvest();
 
 	const { queryParams } = useCustomNavigation();
 
 	const hasAction = React.useMemo(() => {
-		return queryParams.has("action")
+		return queryParams.has("action");
 	}, [queryParams]);
 
 	React.useEffect(() => {
@@ -137,7 +138,7 @@ export default function InvestDialog() {
 					</div>
 				</Render>
 			</AppDialog>
-			{numericAmount > 0 && <Proceed amount={numericAmount} project={project} />}
+			{paymentRef && <Proceed amount={numericAmount} project={project} paymentRef={paymentRef} />}
 		</ErrorBoundary>
 	);
 }

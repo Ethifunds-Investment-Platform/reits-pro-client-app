@@ -7,6 +7,8 @@ import useCustomNavigation from "@/hooks/use-navigation";
 import { useQuery } from "@tanstack/react-query";
 import getPropertiesById from "@/services/properties/get-properties-by-id";
 import { toast } from "@/hooks/use-toast";
+import ensureError from "@/lib/ensure-error";
+import initiateInvestment from "@/services/properties/initiate-investment";
 
 type InvestFormValues = {
 	investmentAmount: string;
@@ -17,6 +19,8 @@ export default function useInvest() {
 	const { account } = useAppSelector("account");
 	const [proceed, setProceed] = React.useState(false);
 	const { queryParams, params } = useCustomNavigation();
+	const [isLoading, setIsLoading] = React.useState(false);
+	const [paymentRef, setPaymentRef] = React.useState<string | null>(null);
 	const { ui } = useActions();
 	const project_id = params.id as string;
 
@@ -63,9 +67,10 @@ export default function useInvest() {
 
 	const handleClose = React.useCallback(() => {
 		ui.resetDialog();
+		setPaymentRef(null);
 	}, [ui]);
 
-	const onSubmit = () => {
+	const onSubmit = async () => {
 		if (!account?.id) {
 			toast({
 				title: "Error",
@@ -74,12 +79,27 @@ export default function useInvest() {
 			});
 			return;
 		}
-		ui.changeDialog({
-			show: false,
-			type: "",
-		});
-		queryParams.set("action", "pay_now")
-		// setProceed(true);
+		setIsLoading(true);
+		try {
+			const res = await initiateInvestment({ project_id, amount: numericAmount });
+			if (res.reference) {
+				setPaymentRef(res.reference);
+				ui.changeDialog({
+					show: false,
+					type: "",
+				});
+				queryParams.set("action", "pay_now");
+			}
+		} catch (err) {
+			const error = ensureError(err);
+			toast({
+				title: "Error",
+				description: error.message,
+			});
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const formatAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,5 +138,7 @@ export default function useInvest() {
 		proceed,
 		isValidAmount,
 		numericAmount,
+		paymentRef,
+		isLoading,
 	};
 }
