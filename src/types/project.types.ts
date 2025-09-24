@@ -66,7 +66,6 @@ export type Project = {
 	financial_projections: string | null;
 	created_at: string;
 	updated_at: string;
-	paystack_product_url: string;
 };
 
 export type NewProject = {
@@ -82,7 +81,6 @@ export type NewProject = {
 	currency_id: string;
 	funding_goal: number;
 	expected_roi: number;
-	paystack_product_url: string;
 	minimum_investment: number;
 	maximum_investment: number | null;
 	tenor_unit: TenorUnit;

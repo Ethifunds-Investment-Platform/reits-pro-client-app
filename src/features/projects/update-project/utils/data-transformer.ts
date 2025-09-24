@@ -19,7 +19,6 @@ export function transformProjectToFormData(project: Project): FormValues {
 			state: project.location.state,
 			fullAddress: project.location.fullAddress || "",
 		},
-		paystack_product_url: project.paystack_product_url,
 		// Convert array back to comma-separated string for form
 		risk_factors: project.risk_factors.join(", "),
 		property_highlights: project.property_highlights.join(", "),

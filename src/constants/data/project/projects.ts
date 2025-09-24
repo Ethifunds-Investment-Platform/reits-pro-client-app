@@ -65,7 +65,6 @@ export const projects: Project[] = [
 		financial_projections: "https://example.com/projects/1/financial-projections",
 		created_at: "2024-01-01",
 		updated_at: "2024-04-01",
-		paystack_product_url: "https://example.com/projects/1/paystack-product-url",
 	},
 	{
 		id: "2",
@@ -122,7 +121,6 @@ export const projects: Project[] = [
 		financial_projections: "https://example.com/projects/2/financial-projections",
 		created_at: "2024-02-01",
 		updated_at: "2024-03-15",
-		paystack_product_url: "https://example.com/projects/2/paystack-product-url",
 	},
 	{
 		id: "3",
@@ -177,7 +175,6 @@ export const projects: Project[] = [
 		financial_projections: "https://example.com/projects/3/financial-projections",
 		created_at: "2024-02-15",
 		updated_at: "2024-03-30",
-		paystack_product_url: "https://example.com/projects/3/paystack-product-url",
 	},
 	{
 		id: "4",
@@ -233,7 +230,6 @@ export const projects: Project[] = [
 		financial_projections: "https://example.com/projects/4/financial-projections",
 		created_at: "2023-06-01",
 		updated_at: "2025-01-10",
-		paystack_product_url: "https://example.com/projects/4/paystack-product-url",
 	},
 	{
 		id: "5",
@@ -288,6 +284,5 @@ export const projects: Project[] = [
 		financial_projections: "https://example.com/projects/5/financial-projections",
 		created_at: "2023-05-01",
 		updated_at: "2024-11-22",
-		paystack_product_url: "https://example.com/projects/5/paystack-product-url",
 	},
 ];

@@ -80,7 +80,7 @@ export default React.memo(function ProjectUpdateDialog() {
 						className="min-h-[120px]"
 					/>
 
-					<div className="space-y-2">
+					{/* <div className="space-y-2">
 						<label className="text-sm font-medium">Images (Optional)</label>
 
 						{uploadedImages.length > 0 ? (
@@ -135,7 +135,7 @@ export default React.memo(function ProjectUpdateDialog() {
 								disabled={isLoading}
 							/>
 						)}
-					</div>
+					</div> */}
 				</Render>
 			</form>
 		</AppDialog>

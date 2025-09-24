@@ -16,7 +16,7 @@ export const updateProjectFormSchema = z.object({
 		state: z.string().min(1, "State is required"),
 		fullAddress: z.string().optional(),
 	}),
-	paystack_product_url: z.string().min(1, "Paystack product URL is required"),
+	
 	// Make display_image optional for updates since there's already an existing one
 	display_image: z.instanceof(File).optional(),
 	images: z.array(z.instanceof(File)).optional(),

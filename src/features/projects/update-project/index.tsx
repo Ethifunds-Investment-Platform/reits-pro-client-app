@@ -22,6 +22,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useUpdateProject } from "./use-update-project";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import Render from "@/components/app/render";
 
 export default function UpdateProject() {
 	const navigate = useNavigate();
@@ -47,10 +48,11 @@ export default function UpdateProject() {
 		return () => subscription.unsubscribe();
 	}, [setupErrorHandling]);
 
-	// Loading state while fetching project data
-	if (isLoading) {
-		return (
-			<AppContainer>
+	
+
+	return (
+		<AppContainer>
+			<Render isLoading={isLoading}>
 				<div className="mb-8">
 					<div className="flex items-center gap-4 mb-6">
 						<Button variant="outline" size="sm" asChild>
@@ -62,120 +64,83 @@ export default function UpdateProject() {
 					</div>
 
 					<h1 className="text-2xl font-bold text-navy-800">Update Project</h1>
-					<p className="text-gray-600 mt-2">Loading project data...</p>
+					<p className="text-gray-600 mt-2">
+						Update the details of your property development project
+					</p>
 				</div>
 
 				<Card className="space-y-6">
-					<CardContent className="p-6">
-						<div className="space-y-4">
-							<Skeleton className="h-8 w-full" />
-							<Skeleton className="h-32 w-full" />
-							<div className="grid grid-cols-2 gap-4">
-								<Skeleton className="h-8 w-full" />
-								<Skeleton className="h-8 w-full" />
+					<Form {...form}>
+						<form id="project-form" onSubmit={form.handleSubmit(handleSubmit)}>
+							<div className="flex justify-between px-5 pt-3">
+								<Button
+									type="submit"
+									form="project-form"
+									disabled={isSubmitting}
+									className="bg-navy-800 hover:bg-navy-700"
+								>
+									{isSubmitting ? (
+										<>
+											<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+											Updating...
+										</>
+									) : (
+										<>
+											<Save className="mr-2 h-4 w-4" />
+											Update Project
+										</>
+									)}
+								</Button>
 							</div>
-						</div>
-					</CardContent>
-				</Card>
-			</AppContainer>
-		);
-	}
+							<CardContent className="p-6">
+								<Tabs value={activeTab} onValueChange={setActiveTab}>
+									<TabsList className="flex gap-3 lg:grid grid-cols-5 mb-8 overflow-auto justify-start">
+										<TabsTrigger value="basic-details">Basic Details</TabsTrigger>
+										<TabsTrigger value="location">Location</TabsTrigger>
+										<TabsTrigger value="financial">Financial Details</TabsTrigger>
+										<TabsTrigger value="images">Images</TabsTrigger>
+										<TabsTrigger value="analysis">Analysis</TabsTrigger>
+									</TabsList>
 
-	return (
-		<AppContainer>
-			<div className="mb-8">
-				<div className="flex items-center gap-4 mb-6">
-					<Button variant="outline" size="sm" asChild>
-						<Link to={`/developer/projects/${id}`}>
-							<ArrowLeft className="h-4 w-4 mr-1" />
-							Back to Project
-						</Link>
-					</Button>
-				</div>
+									<ProjectFormBasicDetails form={form} />
 
-				<h1 className="text-2xl font-bold text-navy-800">Update Project</h1>
-				<p className="text-gray-600 mt-2">
-					Update the details of your property development project
-				</p>
-			</div>
+									<ProjectFormLocationTab form={form} />
 
-			<Card className="space-y-6">
-				<Form {...form}>
-					<form id="project-form" onSubmit={form.handleSubmit(handleSubmit)}>
-						<div className="flex justify-between px-5 pt-3">
-							<Input
-								placeholder="Enter Paystack product URL here"
-								{...form.register("paystack_product_url")}
-								className="w-1/3"
-							/>
+									<ProjectFormFinancialDetails form={form} />
 
+									<ProjectFormImagesTab form={form} existingImages={existingImages} />
+
+									<ProjectFormAnalysisTab form={form} existingDocuments={existingDocuments} />
+								</Tabs>
+							</CardContent>
+						</form>
+					</Form>
+
+					<CardFooter className="flex justify-between pt-4 border-t mx-6">
+						{activeTab !== "basic-details" && (
+							<Button type="button" variant="outline" onClick={goToPreviousTab}>
+								Previous
+							</Button>
+						)}
+
+						<div className="ml-auto flex space-x-2">
 							<Button
-								type="submit"
-								form="project-form"
-								disabled={isSubmitting}
-								className="bg-navy-800 hover:bg-navy-700"
+								type="button"
+								variant="outline"
+								onClick={() => navigate(`/developer/projects/${id}`)}
 							>
-								{isSubmitting ? (
-									<>
-										<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-										Updating...
-									</>
-								) : (
-									<>
-										<Save className="mr-2 h-4 w-4" />
-										Update Project
-									</>
-								)}
+								Cancel
 							</Button>
+
+							{activeTab !== "analysis" ? (
+								<Button type="button" onClick={goToNextTab}>
+									Next
+								</Button>
+							) : null}
 						</div>
-						<CardContent className="p-6">
-							<Tabs value={activeTab} onValueChange={setActiveTab}>
-								<TabsList className="flex gap-3 lg:grid grid-cols-5 mb-8 overflow-auto justify-start">
-									<TabsTrigger value="basic-details">Basic Details</TabsTrigger>
-									<TabsTrigger value="location">Location</TabsTrigger>
-									<TabsTrigger value="financial">Financial Details</TabsTrigger>
-									<TabsTrigger value="images">Images</TabsTrigger>
-									<TabsTrigger value="analysis">Analysis</TabsTrigger>
-								</TabsList>
-
-								<ProjectFormBasicDetails form={form} />
-
-								<ProjectFormLocationTab form={form} />
-
-								<ProjectFormFinancialDetails form={form} />
-
-								<ProjectFormImagesTab form={form} existingImages={existingImages} />
-
-								<ProjectFormAnalysisTab form={form} existingDocuments={existingDocuments} />
-							</Tabs>
-						</CardContent>
-					</form>
-				</Form>
-
-				<CardFooter className="flex justify-between pt-4 border-t mx-6">
-					{activeTab !== "basic-details" && (
-						<Button type="button" variant="outline" onClick={goToPreviousTab}>
-							Previous
-						</Button>
-					)}
-
-					<div className="ml-auto flex space-x-2">
-						<Button
-							type="button"
-							variant="outline"
-							onClick={() => navigate(`/developer/projects/${id}`)}
-						>
-							Cancel
-						</Button>
-
-						{activeTab !== "analysis" ? (
-							<Button type="button" onClick={goToNextTab}>
-								Next
-							</Button>
-						) : null}
-					</div>
-				</CardFooter>
-			</Card>
+					</CardFooter>
+				</Card>
+			</Render>
 		</AppContainer>
 	);
 }
