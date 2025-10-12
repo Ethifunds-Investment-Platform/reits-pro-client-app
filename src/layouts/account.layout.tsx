@@ -37,7 +37,7 @@ export default function AccountLayout(props: { requiredRole: UserRole }) {
 			<AuthGate>
 				<Render isLoading={isLoading}>
 					{restricted ? (
-						<Redirect to="/forbidden" />
+						<Redirect to="/forbidden" replace />
 					) : (
 						<SidebarProvider>
 							<AppSidebar role={props.requiredRole} />

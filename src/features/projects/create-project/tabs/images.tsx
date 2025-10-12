@@ -169,121 +169,124 @@ export default function ProjectFormImagesTab({ form, existingImages }: ProjectFo
 					)}
 				/>
 
-				<FormField
-					control={form.control}
-					name="images"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Additional Images (Up to 5)</FormLabel>
-							<FormControl>
-								<div className="space-y-4">
-									{additionalImages.length === 0 && existingImagePreviews.length === 0 ? (
-										<FileInput
-											name="additional_images"
-											accept=".jpg,.jpeg,.png"
-											placeholder="Upload additional images"
-											maxFileSize="1MB"
-											onChange={handleAdditionalImagesChange}
-											multiple
-										/>
-									) : (
-										<div className="border rounded-md p-3">
-											<div className="flex justify-between items-center mb-3">
-												<h4 className="text-sm font-medium">
-													Additional Images (
-													{additionalImages.length + existingImagePreviews.length}/5)
-												</h4>
-												<div className="flex space-x-2">
-													<Button
-														type="button"
-														variant="outline"
-														size="sm"
-														onClick={() => {
-															// Clear the existing file input and trigger a new one
-															const fileInput = document.createElement("input");
-															fileInput.type = "file";
-															fileInput.multiple = true;
-															fileInput.accept = ".jpg,.jpeg,.png";
-															fileInput.onchange = (e) => handleAdditionalImagesChange(e as any);
-															fileInput.click();
-														}}
-													>
-														Add More
-													</Button>
-													<Button
-														type="button"
-														variant="ghost"
-														size="sm"
-														onClick={handleRemoveAllAdditionalImages}
-														className="text-red-500 hover:text-red-700"
-													>
-														Remove All
-													</Button>
-												</div>
-											</div>
-
-											<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-												{/* Existing Images */}
-												{existingImagePreviews.map((imageUrl, index) => (
-													<div
-														key={`existing-${index}`}
-														className="relative border rounded-md overflow-hidden"
-													>
-														<Button
-															type="button"
-															variant="ghost"
-															size="sm"
-															onClick={() => handleRemoveExistingImage(index)}
-															className="absolute top-1 right-1 p-1 bg-white/80 text-red-500 hover:bg-white hover:text-red-700 rounded-full flex items-center justify-center size-6"
-														>
-															<X className="h-3 w-3" />
-														</Button>
-														<img
-															src={imageUrl}
-															alt={`Existing Image ${index + 1}`}
-															className="h-40 w-full object-cover"
-														/>
-														<div className="absolute bottom-1 left-1 px-2 py-1 bg-blue-500 text-white text-xs rounded">
-															Existing
-														</div>
-													</div>
-												))}
-
-												{/* New Images */}
-												{additionalImages.map((img, index) => (
-													<div
-														key={`new-${index}`}
-														className="relative border rounded-md overflow-hidden"
-													>
-														<Button
-															type="button"
-															variant="ghost"
-															size="sm"
-															onClick={() => handleRemoveAdditionalImage(index)}
-															className="absolute top-1 right-1 p-1 bg-white/80 text-red-500 hover:bg-white hover:text-red-700 rounded-full flex items-center justify-center size-6"
-														>
-															<X className="h-3 w-3" />
-														</Button>
-														<img
-															src={img.preview}
-															alt={`New Image ${index + 1}`}
-															className="h-40 w-full object-cover"
-														/>
-														<div className="absolute bottom-1 left-1 px-2 py-1 bg-green-500 text-white text-xs rounded">
-															New
-														</div>
-													</div>
-												))}
-											</div>
-										</div>
-									)}
-								</div>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+				
 			</div>
 		</TabsContent>
 	);
 }
+
+
+//<FormField
+				// 	control={form.control}
+				// 	name="images"
+				// 	render={({ field }) => (
+				// 		<FormItem>
+				// 			<FormLabel>Additional Images (Up to 5)</FormLabel>
+				// 			<FormControl>
+				// 				<div className="space-y-4">
+				// 					{additionalImages.length === 0 && existingImagePreviews.length === 0 ? (
+				// 						<FileInput
+				// 							name="additional_images"
+				// 							accept=".jpg,.jpeg,.png"
+				// 							placeholder="Upload additional images"
+				// 							maxFileSize="1MB"
+				// 							onChange={handleAdditionalImagesChange}
+				// 							multiple
+				// 						/>
+				// 					) : (
+				// 						<div className="border rounded-md p-3">
+				// 							<div className="flex justify-between items-center mb-3">
+				// 								<h4 className="text-sm font-medium">
+				// 									Additional Images (
+				// 									{additionalImages.length + existingImagePreviews.length}/5)
+				// 								</h4>
+				// 								<div className="flex space-x-2">
+				// 									<Button
+				// 										type="button"
+				// 										variant="outline"
+				// 										size="sm"
+				// 										onClick={() => {
+				// 											// Clear the existing file input and trigger a new one
+				// 											const fileInput = document.createElement("input");
+				// 											fileInput.type = "file";
+				// 											fileInput.multiple = true;
+				// 											fileInput.accept = ".jpg,.jpeg,.png";
+				// 											fileInput.onchange = (e) => handleAdditionalImagesChange(e as any);
+				// 											fileInput.click();
+				// 										}}
+				// 									>
+				// 										Add More
+				// 									</Button>
+				// 									<Button
+				// 										type="button"
+				// 										variant="ghost"
+				// 										size="sm"
+				// 										onClick={handleRemoveAllAdditionalImages}
+				// 										className="text-red-500 hover:text-red-700"
+				// 									>
+				// 										Remove All
+				// 									</Button>
+				// 								</div>
+				// 							</div>
+
+				// 							<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+				// 								{/* Existing Images */}
+				// 								{existingImagePreviews.map((imageUrl, index) => (
+				// 									<div
+				// 										key={`existing-${index}`}
+				// 										className="relative border rounded-md overflow-hidden"
+				// 									>
+				// 										<Button
+				// 											type="button"
+				// 											variant="ghost"
+				// 											size="sm"
+				// 											onClick={() => handleRemoveExistingImage(index)}
+				// 											className="absolute top-1 right-1 p-1 bg-white/80 text-red-500 hover:bg-white hover:text-red-700 rounded-full flex items-center justify-center size-6"
+				// 										>
+				// 											<X className="h-3 w-3" />
+				// 										</Button>
+				// 										<img
+				// 											src={imageUrl}
+				// 											alt={`Existing Image ${index + 1}`}
+				// 											className="h-40 w-full object-cover"
+				// 										/>
+				// 										<div className="absolute bottom-1 left-1 px-2 py-1 bg-blue-500 text-white text-xs rounded">
+				// 											Existing
+				// 										</div>
+				// 									</div>
+				// 								))}
+
+				// 								{/* New Images */}
+				// 								{additionalImages.map((img, index) => (
+				// 									<div
+				// 										key={`new-${index}`}
+				// 										className="relative border rounded-md overflow-hidden"
+				// 									>
+				// 										<Button
+				// 											type="button"
+				// 											variant="ghost"
+				// 											size="sm"
+				// 											onClick={() => handleRemoveAdditionalImage(index)}
+				// 											className="absolute top-1 right-1 p-1 bg-white/80 text-red-500 hover:bg-white hover:text-red-700 rounded-full flex items-center justify-center size-6"
+				// 										>
+				// 											<X className="h-3 w-3" />
+				// 										</Button>
+				// 										<img
+				// 											src={img.preview}
+				// 											alt={`New Image ${index + 1}`}
+				// 											className="h-40 w-full object-cover"
+				// 										/>
+				// 										<div className="absolute bottom-1 left-1 px-2 py-1 bg-green-500 text-white text-xs rounded">
+				// 											New
+				// 										</div>
+				// 									</div>
+				// 								))}
+				// 							</div>
+				// 						</div>
+				// 					)}
+				// 				</div>
+				// 			</FormControl>
+				// 			<FormMessage />
+				// 		</FormItem>
+				// 	)}
+				// />

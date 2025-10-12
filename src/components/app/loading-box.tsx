@@ -11,7 +11,7 @@ type LoadingBoxProps = {
 };
 
 export default React.memo(function LoadingBox(props: LoadingBoxProps) {
-	const { position = "center", spinnerSize = "md", type = "responsive", load_type="custom" } = props;
+	const { position = "center", spinnerSize = "md", type = "responsive", load_type="spinner" } = props;
 	const cn = classnames(
 		"flex justify-center",
 		{

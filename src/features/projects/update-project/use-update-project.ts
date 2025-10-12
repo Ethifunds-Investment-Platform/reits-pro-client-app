@@ -48,14 +48,13 @@ export function useUpdateProject() {
 				state: "",
 				fullAddress: "",
 			},
-			paystack_product_url: "",
 			risk_factors: "",
 			property_highlights: "",
 			currency_id: "",
 			funding_goal: 0,
 			expected_roi: 0,
 			minimum_investment: 0,
-			maximum_investment: 0,
+			maximum_investment: null,
 			tenor_unit: "months" as TenorUnit,
 			tenor_value: 12,
 			distribution_frequency: "monthly" as DistributionFrequency,
@@ -81,7 +80,10 @@ export function useUpdateProject() {
 				const formData = transformProjectToFormData(project);
 
 				// Reset form with the fetched data
-				form.reset(formData);
+				form.reset({
+					...formData,
+					maximum_investment: formData.maximum_investment || null,
+				});
 
 				// Extract image URLs for display
 				const imageData = extractImageUrls(project);
@@ -115,6 +117,13 @@ export function useUpdateProject() {
 
 		setIsSubmitting(true);
 		try {
+			const checkFile = (value: any) => {
+				if (value instanceof File) {
+					return value;
+				}
+				return null;
+			};
+
 			// Convert string fields to arrays
 			const riskFactors = values.risk_factors
 				.split(",")
@@ -132,13 +141,12 @@ export function useUpdateProject() {
 				name: values.name,
 				description: values.description,
 				type: values.type as ProjectType,
-				display_image: values.display_image || (existingImages.displayImageUrl as any), // Will be handled by backend
+				display_image:checkFile(values.display_image),
 				location: {
 					country: values.location.country,
 					state: values.location.state,
 					fullAddress: values.location.fullAddress || "",
 				},
-				paystack_product_url: values.paystack_product_url,
 				risk_factors: riskFactors,
 				property_highlights: propertyHighlights,
 				currency_id: values.currency_id,
@@ -152,10 +160,10 @@ export function useUpdateProject() {
 				images: values.images || [],
 				developer_id: account.id,
 				funding_deadline: values.funding_deadline || null,
-				project_memo: values.project_memo || null,
-				developer_track_record: values.developer_track_record || null,
-				market_analysis: values.market_analysis || null,
-				financial_projections: values.financial_projections || null,
+				project_memo: checkFile(values.project_memo) ,
+				developer_track_record: checkFile(values.developer_track_record) ,
+				market_analysis: checkFile(values.market_analysis) ,
+				financial_projections: checkFile(values.financial_projections) ,
 			};
 
 			const projectResponse = await updateProject(formattedData);

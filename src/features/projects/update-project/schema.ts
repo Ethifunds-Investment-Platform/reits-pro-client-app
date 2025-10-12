@@ -16,7 +16,7 @@ export const updateProjectFormSchema = z.object({
 		state: z.string().min(1, "State is required"),
 		fullAddress: z.string().optional(),
 	}),
-	paystack_product_url: z.string().min(1, "Paystack product URL is required"),
+	
 	// Make display_image optional for updates since there's already an existing one
 	display_image: z.instanceof(File).optional(),
 	images: z.array(z.instanceof(File)).optional(),
@@ -29,7 +29,7 @@ export const updateProjectFormSchema = z.object({
 	maximum_investment: z
 		.number()
 		.positive("Maximum investment must be a positive number")
-		.optional(),
+		.optional().nullable(),
 	tenor_unit: z.enum(TENOR_UNITS as unknown as [string, ...string[]], {
 		message: "Tenor unit is required",
 	}),

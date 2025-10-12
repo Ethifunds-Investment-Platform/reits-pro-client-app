@@ -14,7 +14,7 @@ export default React.memo(function Updates(props: Project) {
 	const { ui } = useActions();
 	const isLoggedIn = !!account?.id;
 
-	const isDeveloper = account?.role === "developer";
+	const isDeveloper = props.developer_id === account?.id;
 	const {
 		data: updates,
 		isFetching,

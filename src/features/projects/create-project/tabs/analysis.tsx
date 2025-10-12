@@ -145,7 +145,7 @@ export default function ProjectFormAnalysisTab({
 									) : (
 										<FileInput
 											name="project_memo"
-											accept=".pdf,.doc,.docx"
+											accept=".pdf"
 											placeholder="Upload project memo document"
 											maxFileSize="1MB"
 											onChange={(e) => handleFileChange("project_memo", e)}
@@ -198,7 +198,7 @@ export default function ProjectFormAnalysisTab({
 									) : (
 										<FileInput
 											name="developer_track_record"
-											accept=".pdf,.doc,.docx"
+											accept=".pdf"
 											placeholder="Upload developer track record document"
 											maxFileSize="1MB"
 											onChange={(e) => handleFileChange("developer_track_record", e)}
@@ -252,7 +252,7 @@ export default function ProjectFormAnalysisTab({
 										) : (
 											<FileInput
 												name="market_analysis"
-												accept=".pdf,.doc,.docx,.xls,.xlsx"
+												accept=".pdf"
 												placeholder="Upload market analysis document"
 												maxFileSize="1MB"
 												onChange={(e) => handleFileChange("market_analysis", e)}
@@ -305,7 +305,7 @@ export default function ProjectFormAnalysisTab({
 										) : (
 											<FileInput
 												name="financial_projections"
-												accept=".pdf,.doc,.docx,.xls,.xlsx"
+												accept=".pdf"
 												placeholder="Upload financial projections document"
 												maxFileSize="1MB"
 												onChange={(e) => handleFileChange("financial_projections", e)}
