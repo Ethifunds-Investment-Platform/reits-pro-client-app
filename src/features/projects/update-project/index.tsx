@@ -72,7 +72,7 @@ export default function UpdateProject() {
 				<Card className="space-y-6">
 					<Form {...form}>
 						<form id="project-form" onSubmit={form.handleSubmit(handleSubmit)}>
-							<div className="flex justify-between px-5 pt-3">
+							<div className="flex justify-end px-5 pt-3">
 								<Button
 									type="submit"
 									form="project-form"

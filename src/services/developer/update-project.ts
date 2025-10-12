@@ -1,7 +1,7 @@
 import { variables } from "@/constants";
 import axios from "@/lib/axios";
 import { NewProject, Project } from "@/types/project.types";
-import { buildProjectFormData } from "@/lib/build-form-data";
+import { buildFormData } from "@/lib/build-form-data";
 import { projects } from "@/constants/data/project/projects";
 
 type Response = Project;
@@ -9,9 +9,9 @@ type Response = Project;
 type Parameters = NewProject & { id: string };
 
 export async function production(data: Parameters): Promise<Response> {
-	const formData = buildProjectFormData(data);
+	const formData = buildFormData(data);
 
-	const response = await axios.put(`/developers/projects/${data.id}`, formData, {
+	const response = await axios.post(`/developers/projects/${data.id}`, formData, {
 		headers: {
 			"Content-Type": "multipart/form-data",
 		},

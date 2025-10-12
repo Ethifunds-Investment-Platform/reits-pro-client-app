@@ -66,6 +66,7 @@ const App = () => {
 						<Route path="/developer/projects/:id/update" element={<UpdateProjectPage />} />
 						<Route path="/developer/projects/:id" element={<ProjectDetailsPage />} />
 						<Route path="/profile/developer" element={<DeveloperProfile />} />
+						<Route path="/investor/investments" element={<InvestorInvestmentsPage />} />
 					</Route>
 
 					{/* Investor Routes */}

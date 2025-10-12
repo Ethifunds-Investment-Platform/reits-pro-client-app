@@ -59,7 +59,7 @@ export default function CreateProject() {
 			<Card className="space-y-6">
 				<Form {...form}>
 					<form id="project-form" onSubmit={form.handleSubmit(handleSubmit)}>
-						<div className="flex justify-between px-5 pt-3">
+						<div className="flex justify-end px-5 pt-3">
 							{/* <Input
 								placeholder="Enter Paystack product URL here"
 								{...form.register("paystack_product_url")}

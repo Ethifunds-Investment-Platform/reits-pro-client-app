@@ -29,7 +29,7 @@ export const updateProjectFormSchema = z.object({
 	maximum_investment: z
 		.number()
 		.positive("Maximum investment must be a positive number")
-		.optional(),
+		.optional().nullable(),
 	tenor_unit: z.enum(TENOR_UNITS as unknown as [string, ...string[]], {
 		message: "Tenor unit is required",
 	}),
